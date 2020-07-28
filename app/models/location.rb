@@ -9,4 +9,5 @@
 #  updated_at :datetime         not null
 #
 class Location < ApplicationRecord
+    validates :id, :name, :city, presence: true
 end

@@ -12,4 +12,17 @@
 #  updated_at    :datetime         not null
 #
 class WorkOrder < ApplicationRecord
+    require 'csv'
+
+    validates :id, :technician_id, :location_id, :time, :duration, :price, presence: true
+
+
+    def importFile(file)
+        items = []
+        CSV.foreach(file, headers: true) do |row|
+            items << row.to_h
+        end
+
+        WorkOrder.import(items)
+    end
 end
