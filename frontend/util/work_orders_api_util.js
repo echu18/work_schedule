@@ -9,7 +9,7 @@ export const getWorkOrder = (workOrderId) => {
 export const allWorkOrders = () => {
   return $.ajax({
     url: `/api/work_orders`,
-    method: "GET",
+    method: "GET"
   });
 };
 

@@ -5,17 +5,29 @@ class Schedule extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      locations: "",
-      technicians: "",
-      workOrders: ""
+      render: false
+      // locations: "",
+      // technicians: "",
+      // workOrders: ""
     };
+    // this.workOrderList = this.workOrderList.bind(this);
   }
 
   componentDidMount(){
-    this.props.fetchAllLocations()
-    this.props.fetchAllTechnicians();
+      this.props.fetchAllWorkOrders()
+        .then(this.props.fetchAllTechnicians())
+        .then(this.props.fetchAllLocations())
+        .then(() => this.setState({ render: true }));
 
-    // Promise.all(this.props.fetchAllTechnicians, this.props.fetchAllLocations, () => (this.setState({locations: this.props.locations, technicians: this.props.technicians})) ) 
+
+      // this.props.fetchAllTechnicians()
+      // .then(() => this.props.fetchAllLocations())
+      //   .then(() => this.props.fetchAllWorkOrders())
+      //   .then(() => this.setState({ render: true }));
+    
+
+    // Promise.all([this.props.fetchAllWorkOrders(), this.props.fetchAllTechnicians(), this.props.fetchAllLocations() ])
+    //   .then(this.setState({render: true}))  
     
     // return function(){ 
     //   this.props.fetchAllTechnicians();
@@ -27,7 +39,7 @@ class Schedule extends React.Component {
 
   componentDidUpdate(prevProps, prevState){
     if (prevProps !== this.props) {
-      this.setState({locations: this.props.locations, technicians: this.props.technicians})
+      this.setState({render: true})
     }
   }
 //   handleDataType(e) {
@@ -51,21 +63,100 @@ class Schedule extends React.Component {
 //     }
 //   }
 
+
+
+    // workOrderList() {
+    
+    //   // let list = this.props.workOrders.filter(workOrder =>
+    //   //   workOrder.technician_id === technicianId)
+    //   // debugger
+    //   // return list.map(workOrder => {
+    //   //   let location = this.props.locations[workOrder.location_id];
+    //   //   let technician = this.props.technicians[technicianId];
+
+    //   //   if (!location || !technician) return null;
+
+
+    //   //   return (<ul>
+    //   //     <li>WorkOrder id: {workOrder.id}</li>
+    //   //     <li>Location name: {location.name}</li>
+    //   //     <li>Location city: {location.city}</li>
+          
+    //   //     </ul>)
+    //   // })
+
+
+    //   if (!this.props.locations || !this.props.technicians) return null;
+
+    //     this.props.technicians.map((technician) => {
+    //     let list = this.props.workOrders.filter(workOrder =>
+    //       workOrder.technician_id === technician.id)
+
+          
+    //       return (
+    //         <div><p>id: {technician.id} - {technician.name}</p>
+
+    //         {list.map(workOrder => {
+    //           let location = this.props.locations[workOrder.location_id];
+    //           let technician = this.props.technicians[technician.id];
+
+    //           return (
+    //             <ul>
+    //               <li>Technician: {technician.name}</li>
+    //               <li>WorkOrder id: {workOrder.id}</li>
+    //               <li>Location name: {location.name}</li>
+    //               <li>Location city: {location.city}</li>
+    //             </ul>
+    //             )
+    //         })}
+    //         </div>
+    //       );
+    //     });
+    // }
+
   render() {
 
-    // const locations = (
-    //    this.state.locations.map(location => {
-    //       return (
-    //         <div>
-    //           <p>{location.name}</p>
-    //           <p>{location.city}</p>
-    //         </div>
-    //       )
-    //     })
-    // )
-
-    if (this.props.locations === "") return null;
     
+
+    // if (
+    //   !this.props.locations ||
+    //   !this.props.technicians ||
+    //   !this.props.workOrders
+    // ) return null;
+    
+
+
+    let {locations, technicians, workOrders} = this.props;
+
+
+    // function mapTechnicians(technicians, workOrders) {
+    //   debugger
+    //   function getWorkOrders(technicianId){
+    //     return workOrders.filter(workOrder => workOrder.technician_id === technicianId)
+    //   }
+
+
+    //   let mappedTechnicians = []
+
+    //   for (let i=0; i < technicians.length; i++) {
+    //       let technician = technicians[i]
+    //       let filteredOrders = getWorkOrders(technician.id)
+
+    //       mapped.push([<div>
+    //               <p>{technician.name}-{technician.id}</p>
+    //               <p>{filteredOrders[0].time}</p>
+    //       </div>])
+    //   }
+    
+
+    //   return mappedTechnicians;
+    // }
+
+
+
+
+
+
     return (
       <div>
         <h3>Schedule</h3>
@@ -80,16 +171,21 @@ class Schedule extends React.Component {
           )
         })}
 
-
         <h3>Technicians</h3>
-        {this.props.technicians.map(technician => {
-           return (
-             <div>
-               <p>id:{technician.id} - {technician.name}</p>
-             </div>
-           )
-         })}
-      </div>
+        {/* {this.props.workOrders.length > 0 ? mapTechnicians(technicians, workOrders) : null} */}
+  
+
+
+       
+       
+
+
+
+
+
+
+
+    </div>
     );
   }
 }

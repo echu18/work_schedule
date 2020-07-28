@@ -6,7 +6,7 @@ import workOrdersReducer from "./work_orders_reducer";
 const entitiesReducer = combineReducers({
   technicians: techniciansReducer,
   locations: locationsReducer,
-  workOrders: workOrdersReducer,
+  workOrders: workOrdersReducer
 });
 
 export default entitiesReducer;

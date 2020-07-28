@@ -1,15 +1,16 @@
 
 class Api::WorkOrdersController < ApplicationController
-    include Rails.application.routes.url_helpers
+    # include Rails.application.routes.url_helpers
     require 'date'
 
     def index
-        @work_orders = Work_order.all
+        @work_orders = WorkOrder.all
+        render :teplate => 'work_orders/index'
     end
 
     
     def show
-        @work_order = Work_order.find(params[:id])
+        @work_order = WorkOrder.find(params[:id])
         render :show
     end
 
@@ -52,7 +53,7 @@ class Api::WorkOrdersController < ApplicationController
 
 
     def update
-        @work_order = Work_order.find_by(id: params[:id])
+        @work_order = WorkOrder.find_by(id: params[:id])
 
         if @work_order && @work_order.update_attributes(work_order_params)
             render :show
@@ -65,7 +66,7 @@ class Api::WorkOrdersController < ApplicationController
 
 
     def destroy
-        @work_order = Work_order.find(params[:id])
+        @work_order = WorkOrder.find(params[:id])
 
         if @work_order
             @work_order.destroy
