@@ -43,13 +43,11 @@ class Api::WorkOrdersController < ApplicationController
             
                 @work_order = WorkOrder.new(filtered_params)
 
-                if @work_order.save
-                    # render :show
-                else
+                if !@work_order.save
                     render json: @work_order.errors.full_messages, status: 401
                 end
-                
             end
+            render :show
         end
     end
 
