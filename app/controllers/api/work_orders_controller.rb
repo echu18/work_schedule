@@ -29,7 +29,6 @@ class Api::WorkOrdersController < ApplicationController
 
 
     def import_data
-        debugger
         @import_data = JSON.parse(params[:import_data])
 
 

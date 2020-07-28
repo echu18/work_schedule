@@ -9,4 +9,6 @@
 #
 class Technician < ApplicationRecord
     validates :id, :name, presence: true
+
+    has_many :work_orders, foreign_key: :technician_id, class_name: :WorkOrder
 end

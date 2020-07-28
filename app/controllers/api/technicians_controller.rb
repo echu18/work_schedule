@@ -13,11 +13,30 @@ class Api::TechniciansController < ApplicationController
     def create        
         @technician = Technician.new(technician_params)
         
-        
         if @technician.save
             render :show
         else
             render json: @technician.errors.full_messages, status: 401
+        end
+    end
+
+
+    def import_data
+        @import_data = JSON.parse(params[:import_data])
+
+        debugger
+        if @import_data && @import_data.length > 0
+            @import_data.each do |import|
+                
+                filtered_params = {id: import["id"], name: import["name"]}
+            
+                @technician = Technician.new(filtered_params)
+
+                if !@technician.save
+                    render json: @technician.errors.full_messages, status: 401
+                end
+            end
+            render :show
         end
     end
 

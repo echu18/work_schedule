@@ -8,15 +8,18 @@ export const importFile = (dataType, fileData) => {
     // })
     let import_data = JSON.stringify(fileData)
 
-
+debugger
 
     switch (dataType){
         case 'technician':
             url = `/api/import_technician_data`;
+            break;
         case 'location':
             url = `/api/import_location_data`;
+            break;
         case 'work-order':
-            url = `/api/import_work_order_data`
+            url = `/api/import_work_order_data`;
+            break;
     }
 
     return $.ajax({

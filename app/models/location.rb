@@ -10,4 +10,6 @@
 #
 class Location < ApplicationRecord
     validates :id, :name, :city, presence: true
+
+    has_many :work_orders, foreign_key: :location_id, class_name: :WorkOrder
 end

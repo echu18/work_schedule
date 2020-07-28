@@ -35,6 +35,29 @@ class Api::LocationsController < ApplicationController
     end
 
 
+    def import_data
+        @import_data = JSON.parse(params[:import_data])
+
+
+        if @import_data && @import_data.length > 0
+            @import_data.each do |import|
+                
+                filtered_params = {id: import["id"], name: import["name"], city: import["city"]}
+            
+                @location = Location.new(filtered_params)
+
+                if !@location.save
+                    render json: @location.errors.full_messages, status: 401
+                end
+            end
+            render :show
+        end
+    end
+
+
+
+
+
     def destroy
         @location = Location.find(params[:id])
 

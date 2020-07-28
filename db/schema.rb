@@ -10,28 +10,25 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_07_28_015201) do
+ActiveRecord::Schema.define(version: 2020_07_28_152712) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
-  create_table "locations", id: false, force: :cascade do |t|
-    t.integer "id"
+  create_table "locations", id: :integer, default: nil, force: :cascade do |t|
     t.string "name"
     t.string "city"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
 
-  create_table "technicians", id: false, force: :cascade do |t|
-    t.integer "id"
+  create_table "technicians", id: :integer, default: nil, force: :cascade do |t|
     t.string "name"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
 
-  create_table "work_orders", id: false, force: :cascade do |t|
-    t.integer "id"
+  create_table "work_orders", id: :integer, default: nil, force: :cascade do |t|
     t.integer "technician_id"
     t.integer "location_id"
     t.datetime "time"

@@ -1,6 +1,6 @@
 import { connect } from 'react-redux';
 import Upload from './upload';
-import {uploadFile} from '../../actions/work_order_actions'
+import {uploadFile} from '../../actions/upload_actions'
 
 const mapStateToProps = (state, ownProps) => ({
 })
