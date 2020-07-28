@@ -1,4 +1,5 @@
 import { importFile } from "../util/upload_api_util";
+import {getTechnician, allTechnicians, createTechnician, editTechnician, deleteTechnician} from '../util/technicians_api_util';
 
 export const RECEIVE_TECHNICIAN = "RECEIVE_TECHNICIAN";
 export const RECEIVE_TECHNICIANS = "RECEIVE_TECHNICIANS";
@@ -29,8 +30,14 @@ const removeErrors = () => ({
 //     (error) => dispatch(receiveErrors(error.responseJSON))
 // );
 
-// export const fetchUser = (id) => (dispatch) =>
-//   getUser(id).then(
-//     (user) => dispatch(receiveUser(user)),
-//     (error) => dispatch(receiveErrors(error.responseJSON))
-//   );
+export const fetchAllTechnicians= () => (dispatch) =>
+  allTechnicians().then(
+    (technicians) => dispatch(receiveTechnicians(technicians)),
+    (error) => dispatch(receiveErrors(error.responseJSON))
+  );
+
+export const fetchTechnician= (id) => (dispatch) =>
+  getTechnician(id).then(
+    (technician) => dispatch(receiveTechnician(technician)),
+    (error) => dispatch(receiveErrors(error.responseJSON))
+  );
