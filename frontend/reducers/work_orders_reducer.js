@@ -3,7 +3,7 @@ import { RECEIVE_TECHNICIAN, RECEIVE_TECHNICIANS } from "../actions/technician_a
 
 export default (state = {}, action) => {
   Object.freeze(state);
-  debugger
+  
   switch (action.type) {
   
     case RECEIVE_WORK_ORDER:

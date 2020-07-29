@@ -38,6 +38,8 @@ module.exports = {
     alias: {
       'react-grid': path.join(__dirname,"/node_modules/react-grid-layout/css/styles.css"),
       'react-resize': path.join(__dirname, "/node_modules/react-resizable/css/styles.css"),
+      'cldr$': 'cldrjs',
+      'cldr': 'cldrjs/dist/cldr'
     },
   },
 };
