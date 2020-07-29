@@ -12,43 +12,45 @@ class Schedule extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      render: false
-      // locations: "",
-      // technicians: "",
-      // workOrders: ""
+      render: false,
+      locations: [],
+      technicians:[],
+      workOrders: [],
+      events: []
     };
     // this.workOrderList = this.workOrderList.bind(this);
   }
 
   componentDidMount(){
-      this.props.fetchAllWorkOrders()
+      this.props
+        .fetchAllWorkOrders()
         .then(this.props.fetchAllTechnicians())
         .then(this.props.fetchAllLocations())
-        // .then(() => this.setState({ render: true }));
-
-
-      // this.props.fetchAllTechnicians()
-      // .then(() => this.props.fetchAllLocations())
-      //   .then(() => this.props.fetchAllWorkOrders())
-      //   .then(() => this.setState({ render: true }));
-    
-
-    // Promise.all([this.props.fetchAllWorkOrders(), this.props.fetchAllTechnicians(), this.props.fetchAllLocations() ])
-    //   .then(this.setState({render: true}))  
-    
-    // return function(){ 
-    //   this.props.fetchAllTechnicians();
-    //   this.props.fetchAllLocations()
-    //   this.setState({locations: this.props.locations, technicians: this.props.technicians})
-    // }
+        .then(
+          this.setState(
+            {
+              locations: this.props.locations,
+              technicians: this.props.technicians,
+              workOrders: this.props.workOrders,
+            }, () => this.mapCalEvents())
+          )
+        
   }
 
 
   componentDidUpdate(prevProps, prevState){
     if (prevProps !== this.props) {
-      this.setState({render: true})
+      this.setState(
+        {
+          locations: this.props.locations,
+          technicians: this.props.technicians,
+          workOrders: this.props.workOrders,
+        },
+        () => this.mapCalEvents()
+      );
     }
   }
+
 //   handleDataType(e) {
 //     e.preventDefault();
 //     this.setState({ dataType: e.target.value });
@@ -70,110 +72,101 @@ class Schedule extends React.Component {
 //     }
 //   }
 
+  
+
+ 
+    mapCalEvents() {
+      if (this.state.workOrders.length < 1 || this.state.locations.length < 1 ) return;
+      let events = []
+
+      
+      let locations = this.state.locations;
+
+      this.state.workOrders.forEach(workOrder => {
+        // let workOrder = Object.values(this.state.workOrders)[i];
+        let time = new Date(workOrder.time)
+        let hours = time.getHours();
+        let minutes = time.getMinutes();
+        let newTime = new Date(time.getTime()+1000*60*60*(workOrder.duration/60))
+        let location = locations[workOrder.location_id];
+        
+        
+        let title = (
+          <div>
+            {/* <p>{`Start at: ${hours}:${minutes}`}</p> */}
+            <p>{`Start at: ${time}`}</p>
+            {/* <p>{`End at: ${newTime}`}</p>
+            <p>{`Duration: ${workOrder.duration}`}</p>
+            <p>{`Location: ${location.name}`}</p>
+            <p>{`City: ${location.city}`}</p> */}
+          </div>
+          // `Start at ${time}
+          // Location: ${location.name}
+          // City: ${location.city}`
+        );
+        
+          events.push({
+            id: `work-order-${workOrder.id}`,
+            // title: `Start: ${hours}:${minutes}`,
+            title: title,
+            resourceId: `tech-${workOrder.technician_id}`,
+            // start: time,
+            // end: (time + workOrder.duration),
+            start: new Date(2020, 6, 28, 10, 30),
+            end: new Date(2020, 6, 28, 12, 0),
+            // desc: `${location.name}-${location.city}`,
+          });
+        
+      })
+
+    //     events.push({
+    //   id: 0,
+    //   title: "All Day Event very long title",
+    //   start: new Date(2020, 6, 28, 10, 30),
+    //   end: new Date(2020, 6, 28, 12, 0),
+    //   resourceId: "tech-1",
+    // },
+    // {
+    //   id: 1,
+    //   title: "Long Event",
+    //   start: new Date(2020, 6, 28, 13, 30),
+    //   end: new Date(2020, 6, 28, 15, 0),
+    //   resourceId: "tech-2",
+    // },
+
+    // {
+    //   id: 2,
+    //   title: "DTS STARTS",
+    //   start: new Date(2020, 6, 28, 17, 0, 0),
+    //   end: new Date(2020, 6, 28, 19, 0, 0),
+    //   resource: "tech-3",
+    // })
+
+      this.setState({events: events})
+    }
 
 
-    // workOrderList() {
-    
-    //   // let list = this.props.workOrders.filter(workOrder =>
-    //   //   workOrder.technician_id === technicianId)
-    //   // debugger
-    //   // return list.map(workOrder => {
-    //   //   let location = this.props.locations[workOrder.location_id];
-    //   //   let technician = this.props.technicians[technicianId];
-
-    //   //   if (!location || !technician) return null;
 
 
-    //   //   return (<ul>
-    //   //     <li>WorkOrder id: {workOrder.id}</li>
-    //   //     <li>Location name: {location.name}</li>
-    //   //     <li>Location city: {location.city}</li>
-          
-    //   //     </ul>)
-    //   // })
 
 
-    //   if (!this.props.locations || !this.props.technicians) return null;
 
-    //     this.props.technicians.map((technician) => {
-    //     let list = this.props.workOrders.filter(workOrder =>
-    //       workOrder.technician_id === technician.id)
 
-          
-    //       return (
-    //         <div><p>id: {technician.id} - {technician.name}</p>
 
-    //         {list.map(workOrder => {
-    //           let location = this.props.locations[workOrder.location_id];
-    //           let technician = this.props.technicians[technician.id];
 
-    //           return (
-    //             <ul>
-    //               <li>Technician: {technician.name}</li>
-    //               <li>WorkOrder id: {workOrder.id}</li>
-    //               <li>Location name: {location.name}</li>
-    //               <li>Location city: {location.city}</li>
-    //             </ul>
-    //             )
-    //         })}
-    //         </div>
-    //       );
-    //     });
-    // }
+
+
 
   render() {
-
-    
-
     // if (
     //   !this.props.locations ||
     //   !this.props.technicians ||
     //   !this.props.workOrders
     // ) return null;
     
-
-
-    let {locations, technicians, workOrders} = this.props;
-
-
-    // function mapTechnicians(technicians, workOrders) {
-    //   debugger
-    //   function getWorkOrders(technicianId){
-    //     return workOrders.filter(workOrder => workOrder.technician_id === technicianId)
-    //   }
-
-
-    //   let mappedTechnicians = []
-
-    //   for (let i=0; i < technicians.length; i++) {
-    //       let technician = technicians[i]
-    //       let filteredOrders = getWorkOrders(technician.id)
-
-    //       mapped.push([<div>
-    //               <p>{technician.name}-{technician.id}</p>
-    //               <p>{filteredOrders[0].time}</p>
-    //       </div>])
-    //   }
     
 
-    //   return mappedTechnicians;
-    // }
-
-
-
-    // const localizer = globalizeLocalizer(globalize);
-
-    // const MyCalendar = (props) => (
-    //   <div>
-    //     <Calendar
-    //       localizer={localizer}
-    //       events={myEventsList}
-    //       startAccessor="start"
-    //       endAccessor="end"
-    //       style={{ height: 500 }}
-    //     />
-    //   </div>
-    // );
+  // let {locations, technicians, workOrders} = this.props;
 
 
   const localizer = momentLocalizer(moment);
@@ -181,138 +174,140 @@ class Schedule extends React.Component {
 
   // const events = [
   //   {
+  //     id: 1,
   //     title: "Muffin fiesta",
-  //     resourceId: "a",
-  //     start: new Date(2015, 3, 1, 5, 30, 0, 0),
-  //     end: new Date(2015, 3, 1, 10, 30, 0, 0),
+  //     resourceId: "tech-1",
+  //     start: new Date(2020, 7, 28, 5, 30, 0, 0),
+  //     end: new Date(2020, 7, 28, 10, 30, 0, 0),
+  //     desc: "",
   //   },
   //   {
   //     title: "Cake fiesta",
-  //     resourceId: "b",
-  //     start: new Date(2015, 3, 1, 2, 30, 0, 0),
-  //     end: new Date(2015, 3, 1, 4, 30, 0, 0),
+  //     resourceId: "tech-1",
+  //     start: new Date(2020, 7, 28, 13, 30, 0, 0),
+  //     end: new Date(2020, 7, 28, 17, 30, 0, 0),
   //   },
   // ];
 
 
+  // const events = [
+  //   {
+  //     id: 0,
+  //     title: "All Day Event very long title",
+  //     start: new Date(2020, 6, 28, 10, 30),
+  //     end: new Date(2020, 6, 28, 12, 0),
+  //     resourceId: "tech-1",
+  //     tooltip: "nugget",
+  //   },
+  //   {
+  //     id: 1,
+  //     title: "Long Event",
+  //     start: new Date(2020, 6, 28, 13, 30),
+  //     end: new Date(2020, 6, 28, 15, 0),
+  //     resourceId: "tech-2",
+  //     tooltip: "fries",
+  //   },
 
-    const myEventsList = [
-  {
-    id: 0,
-    title: "All Day Event very long title",
-    allDay: true,
-    start: new Date(2015, 3, 0),
-    end: new Date(2015, 3, 1)
-  },
-  {
-    id: 1,
-    title: "Long Event",
-    start: new Date(2015, 3, 7),
-    end: new Date(2015, 3, 10)
-  },
+  //   {
+  //     id: 2,
+  //     title: "DTS STARTS",
+  //     start: new Date(2020, 6, 28, 17, 0, 0),
+  //     end: new Date(2020, 6, 28, 19, 0, 0),
+  //     resourceId: "tech-3",
+  //     tooltip: "hello",
+  //     desc: "hello"
+  //   },
+  // ];
 
-  {
-    id: 2,
-    title: "DTS STARTS",
-    start: new Date(2016, 2, 13, 0, 0, 0),
-    end: new Date(2016, 2, 20, 0, 0, 0)
-  },
+    // const events = [];
 
-  {
-    id: 3,
-    title: "DTS ENDS",
-    start: new Date(2016, 10, 6, 0, 0, 0),
-    end: new Date(2016, 10, 13, 0, 0, 0)
-  },
+    
+    // function mapCalEvents(workOrders, locations) {
+    //   if (workOrders.length < 1 || !locations ) return;
+      
 
-  {
-    id: 4,
-    title: "Some Event",
-    start: new Date(2015, 3, 9, 0, 0, 0),
-    end: new Date(2015, 3, 9, 0, 0, 0)
-  },
-  {
-    id: 5,
-    title: "Conference",
-    start: new Date(2015, 3, 11),
-    end: new Date(2015, 3, 13),
-    desc: "Big conference for important people"
-  },
-  {
-    id: 6,
-    title: "Meeting",
-    start: new Date(2015, 3, 12, 10, 30, 0, 0),
-    end: new Date(2015, 3, 12, 12, 30, 0, 0),
-    desc: "Pre-meeting meeting, to prepare for the meeting"
-  },
-  {
-    id: 7,
-    title: "Lunch",
-    start: new Date(2015, 3, 12, 12, 0, 0, 0),
-    end: new Date(2015, 3, 12, 13, 0, 0, 0),
-    desc: "Power lunch"
-  },
-  {
-    id: 8,
-    title: "Meeting",
-    start: new Date(2015, 3, 12, 14, 0, 0, 0),
-    end: new Date(2015, 3, 12, 15, 0, 0, 0)
-  },
-  {
-    id: 9,
-    title: "Happy Hour",
-    start: new Date(2015, 3, 12, 17, 0, 0, 0),
-    end: new Date(2015, 3, 12, 17, 30, 0, 0),
-    desc: "Most important meal of the day"
-  },
-  {
-    id: 10,
-    title: "Dinner",
-    start: new Date(2015, 3, 12, 20, 0, 0, 0),
-    end: new Date(2015, 3, 12, 21, 0, 0, 0)
-  },
-  {
-    id: 11,
-    title: "Birthday Party",
-    start: new Date(2015, 3, 13, 7, 0, 0),
-    end: new Date(2015, 3, 13, 10, 30, 0)
-  },
-  {
-    id: 12,
-    title: "Late Night Event",
-    start: new Date(2015, 3, 17, 19, 30, 0),
-    end: new Date(2015, 3, 18, 2, 0, 0)
-  },
-  {
-    id: 13,
-    title: "Multi-day Event",
-    start: new Date(2015, 3, 20, 19, 30, 0),
-    end: new Date(2015, 3, 22, 2, 0, 0)
-  },
-  {
-    id: 14,
-    title: "Today",
-    start: new Date(new Date().setHours(new Date().getHours() - 3)),
-    end: new Date(new Date().setHours(new Date().getHours() + 3))
-  }]
+    //   for (let i = 0; i < workOrders.length; i++) {
+    //     // debugger
+    //     let workOrder = workOrders[i];
+    //     // let time = new Date(workOrder.time)
+    //     // let hours = time.getHours();
+    //     // let minutes = time.getMinutes();
+    //     let location = locations[workOrder.location_id];
+
+    //     events.push({
+    //       // id: `work-order-${workOrder.id}`,
+    //       // title: `Start: ${hours}:${minutes}`,
+    //       title: `Start: 10:30`,
+    //       resourceId: `tech-${workOrder.technician_id}`,
+    //       // start: time,
+    //       // end: (time + workOrder.duration),
+    //       start: new Date(2020, 6, 28, 10, 30),
+    //       end: new Date(2020, 6, 28, 12, 0),
+    //       // desc: `${location}`,
+    //     });
+    //   }
+
+    // //     events.concat([{
+    // //   id: 0,
+    // //   title: "All Day Event very long title",
+    // //   start: new Date(2020, 6, 28, 10, 30),
+    // //   end: new Date(2020, 6, 28, 12, 0),
+    // //   resourceId: "tech-1",
+    // // },
+    // // {
+    // //   id: 1,
+    // //   title: "Long Event",
+    // //   start: new Date(2020, 6, 28, 13, 30),
+    // //   end: new Date(2020, 6, 28, 15, 0),
+    // //   resourceId: "tech-2",
+    // // },
+
+    // // {
+    // //   id: 2,
+    // //   title: "DTS STARTS",
+    // //   start: new Date(2020, 6, 28, 17, 0, 0),
+    // //   end: new Date(2020, 6, 28, 19, 0, 0),
+    // //   resource: "tech-3",
+    // // }])
+
+    // debugger
+    //   // return Object.assign({}, events);
+    //   // return {event: events};
+    //   // return {events};
+    // }
 
 
-  // const groups = ["A", "B", "C","D"]
 
-  const resources = [
-    {
-      id: "a",
-      title: `Bill Keller`,
-    },
-    {
-      id: "b",
-      title: "Juan Garcia",
-    },
-    {
-      id: "c",
-      title: "Room C",
-    },
-  ];
+  // Resource JSON format:
+  // const resources = [
+  //   {
+  //     id: "a",
+  //     title: `Bill Keller`,
+  //   },
+  //   {
+  //     id: "b",
+  //     title: "Juan Garcia",
+  //   },
+  //   {
+  //     id: "c",
+  //     title: "Room C",
+  //   },
+  // ];
+
+
+  function mapCalResources(technicians){
+    if (!technicians) return;
+    let resources = [];
+
+    for (let i=0; i < technicians.length; i++){
+      let technician = technicians[i];
+
+      resources.push({id:`tech-${technician.id}`, title: `${technician.name}`})
+    }
+    return resources;
+  }
+
+
 
 
 
@@ -330,7 +325,7 @@ class Schedule extends React.Component {
       return date;
   }
   
-
+  
     return (
       <div>
         <h3>Schedule</h3>
@@ -347,23 +342,25 @@ class Schedule extends React.Component {
         })}
 
         <h3>Technicians</h3> */}
-
+      {this.state.workOrders.length > 0 ? (
         <Calendar
-          resources={resources}
+          resources={mapCalResources(this.state.technicians)}
+          // events={[mapCalEvents(this.state.workOrders, this.state.locations)]}
+          events={this.state.events}
+          // events={events}
           localizer={localizer}
-          events={myEventsList}
           culture="en-US"
           startAccessor="start"
           endAccessor="end"
           defaultDate={new Date()}
-          views={["month", "day"]}
+          views={["day", "week", "month"]}
           defaultView="day"
           step={7.5}
           min={dayStartTime()}
           max={dayEndTime()}
-          // max={new Date('19:00:00')}
           style={{ height: 800 }}
         />
+    ) : null}
       </div>
     );
   }
