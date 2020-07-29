@@ -166,60 +166,10 @@ class Schedule extends React.Component {
     
     
 
-  // let {locations, technicians, workOrders} = this.props;
 
 
   const localizer = momentLocalizer(moment);
 
-
-  // const events = [
-  //   {
-  //     id: 1,
-  //     title: "Muffin fiesta",
-  //     resourceId: "tech-1",
-  //     start: new Date(2020, 7, 28, 5, 30, 0, 0),
-  //     end: new Date(2020, 7, 28, 10, 30, 0, 0),
-  //     desc: "",
-  //   },
-  //   {
-  //     title: "Cake fiesta",
-  //     resourceId: "tech-1",
-  //     start: new Date(2020, 7, 28, 13, 30, 0, 0),
-  //     end: new Date(2020, 7, 28, 17, 30, 0, 0),
-  //   },
-  // ];
-
-
-  // const events = [
-  //   {
-  //     id: 0,
-  //     title: "All Day Event very long title",
-  //     start: new Date(2020, 6, 28, 10, 30),
-  //     end: new Date(2020, 6, 28, 12, 0),
-  //     resourceId: "tech-1",
-  //     tooltip: "nugget",
-  //   },
-  //   {
-  //     id: 1,
-  //     title: "Long Event",
-  //     start: new Date(2020, 6, 28, 13, 30),
-  //     end: new Date(2020, 6, 28, 15, 0),
-  //     resourceId: "tech-2",
-  //     tooltip: "fries",
-  //   },
-
-  //   {
-  //     id: 2,
-  //     title: "DTS STARTS",
-  //     start: new Date(2020, 6, 28, 17, 0, 0),
-  //     end: new Date(2020, 6, 28, 19, 0, 0),
-  //     resourceId: "tech-3",
-  //     tooltip: "hello",
-  //     desc: "hello"
-  //   },
-  // ];
-
-    // const events = [];
 
     
     // function mapCalEvents(workOrders, locations) {
