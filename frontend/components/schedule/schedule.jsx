@@ -3,6 +3,8 @@ import ReactDOM from "react-dom";
 
 import { Calendar, momentLocalizer } from "react-big-calendar";
 import moment from "moment";
+import ReactTooltip from "react-tooltip";
+
 
 
 
@@ -19,6 +21,7 @@ class Schedule extends React.Component {
       events: []
     };
     // this.workOrderList = this.workOrderList.bind(this);
+    this.handleEvent = this.handleEvent.bind(this);
   }
 
   componentDidMount(){
@@ -103,19 +106,30 @@ class Schedule extends React.Component {
         
         
         let title = (
-          <div>
-            {/* <p>{`Start at: ${hours}:${minutes}`}</p> */}
-            {/* <p>{`Start at: ${time}`}</p> */}
-            {/* <p>{`End at: ${newTime}`}</p> */}
-            <p>{`Duration: ${workOrder.duration} mins`}</p>
-            <p>{`Location: ${location.name}`}</p>
-            <p>{`City: ${location.city}`}</p>
-            <p>{`Price: $${workOrder.price}`}</p>
-          </div>
+          <a data-tip="React-tooltip" style={{ "z-index": 100 }}>
+            <div id={`work-order-${workOrder.id}`} className="event-title">
+              <p>{`Duration: ${workOrder.duration} mins`}</p>
+              <p>{`Location: ${location.name}`}</p>
+              <p>{`City: ${location.city}`}</p>
+              <p>{`Price: $${workOrder.price}`}</p>
+            </div>
+            <ReactTooltip place="left" type="dark" effect="float">
+              {/* <p>{`${hours}:${minutes}`-`${newHours}:${newMinutes}`}</p> */}
+              <p>{`${hours}:${minutes}`}</p>
+
+              {/* <p>{`Start at: ${time}`}</p> */}
+              {/* <p>{`End at: ${newTime}`}</p> */}
+              <p></p>
+              <p>{`Duration: ${workOrder.duration} mins`}</p>
+              <p>{`Location: ${location.name}`}</p>
+              <p>{`City: ${location.city}`}</p>
+              <p>{`Price: $${workOrder.price}`}</p>
+            </ReactTooltip>
+          </a>
           // `Start at ${time}
           // Location: ${location.name}
           // City: ${location.city}`
-          );
+        );
         
           events.push({
             id: `work-order-${workOrder.id}`,
@@ -160,7 +174,13 @@ class Schedule extends React.Component {
 
 
 
+    handleEvent(e){
+      // let eventDivId = e.title.props.id;
+      // let event = document.getElementById(eventDivId);
 
+      let element = document.getElementsByClassName('rbc-selected')[0]
+      debugger
+    }
 
 
 
@@ -176,13 +196,8 @@ class Schedule extends React.Component {
     //   !this.props.workOrders
     // ) return null;
     
-    
-
-
-
+  
     const localizer = momentLocalizer(moment);
-
-
 
 
   // Resource JSON format:
@@ -314,27 +329,32 @@ class Schedule extends React.Component {
         <h3>Schedule</h3>
 
         {this.state.workOrders.length > 0 ? (
-          <Calendar
-            resources={mapCalResources(this.state.technicians)}
-            // events={[mapCalEvents(this.state.workOrders, this.state.locations)]}
-            events={this.state.events}
-            // events={events}
-            localizer={localizer}
-            culture="en-US"
-            startAccessor="start"
-            endAccessor="end"
-            defaultDate={new Date()}
-            views={["day", "week", "month"]}
-            // views={['day', 'week', 'month']}
-            defaultView="day"
-            // step={7.5}
-            min={dayStartTime()}
-            max={dayEndTime()}
-            style={{ height: 800 }}
-            // onSelectEvent={(event) => console.log(event.title.innhe)}
+          <div>
+            
 
-            // onView={changeMinWidth(this.view)}
-          />
+
+            <Calendar
+              resources={mapCalResources(this.state.technicians)}
+              // events={[mapCalEvents(this.state.workOrders, this.state.locations)]}
+              events={this.state.events}
+              // events={events}
+              localizer={localizer}
+              culture="en-US"
+              startAccessor="start"
+              endAccessor="end"
+              defaultDate={new Date()}
+              views={["day", "week", "month"]}
+              // views={['day', 'week', 'month']}
+              defaultView="day"
+              step={7.5}
+              min={dayStartTime()}
+              max={dayEndTime()}
+              style={{ height: 800 }}
+              onSelectEvent={(event) => this.handleEvent(event)}
+
+              // onView={changeMinWidth(this.view)}
+            />
+          </div>
         ) : null}
       </div>
     );
