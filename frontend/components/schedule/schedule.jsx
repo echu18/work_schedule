@@ -87,24 +87,25 @@ class Schedule extends React.Component {
 
       this.state.workOrders.forEach(workOrder => {
         // let workOrder = Object.values(this.state.workOrders)[i];
-        let time = new Date(workOrder.time)
-        let hours = time.getHours();
-        let minutes = time.getMinutes();
-        let year = time.getFullYear()
-        let month = time.getMonth()
-        let date = time.getDate()
+        let startTime = new Date(workOrder.time)
+        let startHours = startTime.getUTCHours();
+        let startMinutes = startTime.getUTCMinutes();
+        let startYear = startTime.getUTCFullYear()
+        let startMonth = startTime.getUTCMonth()
+        let startDate = startTime.getUTCDate()
 
-
-        let newTime = new Date(time.getTime()+1000*60*60*(workOrder.duration/60))
-        let newHours = newTime.getHours();
-        let newMinutes = newTime.getMinutes();
-        let newYear = newTime.getFullYear();
-        let newMonth = newTime.getMonth();
-        let newDate = newTime.getDate();
+        
+        
+        let endTime = new Date(startTime.getTime()+1000*60*60*(workOrder.duration/60))
+        let endHours = endTime.getUTCHours();
+        let endMinutes = endTime.getUTCMinutes();
+        let endYear = endTime.getUTCFullYear();
+        let endMonth = endTime.getUTCMonth();
+        let endDate = endTime.getUTCDate();
 
         let location = locations[workOrder.location_id];
         
-        
+        debugger
         let title = (
           <a data-tip="React-tooltip" style={{ "z-index": 100 }}>
             <div id={`work-order-${workOrder.id}`} className="event-title">
@@ -113,11 +114,14 @@ class Schedule extends React.Component {
               <p>{`City: ${location.city}`}</p>
               <p>{`Price: $${workOrder.price}`}</p>
             </div>
+
+
+
             <ReactTooltip place="left" type="dark" effect="float">
               {/* <p>{`${hours}:${minutes}`-`${newHours}:${newMinutes}`}</p> */}
-              <p>{`${hours}:${minutes}`}</p>
+              {/* <p>{`${hours}:${minutes}`}</p> */}
 
-              {/* <p>{`Start at: ${time}`}</p> */}
+              <p>{`Start at: ${startHours.toString()}:${startMinutes.toString()}`}</p>
               {/* <p>{`End at: ${newTime}`}</p> */}
               <p></p>
               <p>{`Duration: ${workOrder.duration} mins`}</p>
@@ -138,8 +142,8 @@ class Schedule extends React.Component {
             resourceId: `tech-${workOrder.technician_id}`,
             // start: time,
             // end: (time + workOrder.duration),
-            start: new Date(year, month, date, hours, minutes),
-            end: new Date(newYear, newMonth, newDate, newHours, newMinutes),
+            start: new Date(startYear, startMonth, startDate, startHours, startMinutes),
+            end: new Date(endYear, endMonth, endDate, endHours, endMinutes),
             // desc: `${location.name}-${location.city}`,
           });
         
