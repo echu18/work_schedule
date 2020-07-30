@@ -420,7 +420,6 @@ class Schedule extends React.Component {
             <Calendar
               selectable
               resources={mapCalResources(this.state.technicians)}
-
               // {...calComponents}
 
               events={this.state.events}
@@ -430,17 +429,17 @@ class Schedule extends React.Component {
               endAccessor="end"
               defaultDate={new Date()}
               // views={["day", "week", "month"]}
-              views = {{day: true, month: true}}
+              views={{ day: true, month: true }}
               // defaultView="day"
               defaultView={Views.MONTH}
+              defaultDate={new Date(2019, 9, 1)}
               popup={true}
               // step={7.5}
               min={dayStartTime()}
               max={dayEndTime()}
               style={{ height: 800 }}
               onSelectEvent={(event) => this.handleEvent(event)}
-
-              onView={(event)=>this.changeEventView(event)}
+              onView={(event) => this.changeEventView(event)}
             />
           </div>
         ) : null}
