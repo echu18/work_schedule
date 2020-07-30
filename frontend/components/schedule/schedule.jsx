@@ -159,31 +159,33 @@ class Schedule extends React.Component {
           function eventDetails() {
             
             return (
-              <div id={`work-order-${workOrder.id}`} className={view === "month" ? "compressed-event" : "full-event"}>
+              <div id={`work-order-${workOrder.id}`} className={view === "month" ? "compact-event" : "full-event"}>
                 {view === "month" ? 
                   (<p>
-                    {formatTime(startTime)} - {formatTime(endTime)} |{" "}
-                    {location.name} {location.city} | {technician.name}
+                      {formatTime(startTime)} {" | "} 
+                      {location.name} ({location.city}) - {technician.name}
                   </p>) : 
                   (
                     <div>
-                      <p>{`Duration: ${workOrder.duration} mins`}</p>
-                      <p>{`Location: ${location.name}`}</p>
-                      <p>{`City: ${location.city}`}</p>
-                      <p>{`Price: $${workOrder.price}`}</p>
+                        <p>{`${location.name} (${location.city})`}</p>
+                        <p>{`$${workOrder.price} | ${workOrder.duration} mins`}</p>
                     </div>
                   )
                 }
               </div>
             )
           }
-
+          
+          // <p>{`Duration: ${workOrder.duration} mins`}</p>
+          // <p>{`Location: ${location.name}`}</p>
+          // <p>{`City: ${location.city}`}</p>
+          // <p>{`Price: $${workOrder.price}`}</p>
 
           // switch (view) {
           //   case "day":
           //     return full;
           //   case "month":
-          //     return compressed;
+          //     return compact;
           //   default:
           //     return full;
           // }
@@ -192,10 +194,10 @@ class Schedule extends React.Component {
 
         
         let title = (
-          <div className="event-container">
+          // <div className="event-container">
             <a
             className='tooltip'
-              // className={this.state.event === "month" ? 'compressed-event' : 'full-event' }
+              // className={this.state.event === "month" ? 'compact-event' : 'full-event' }
               data-tip="React-tooltip"
               data-for={`tooltip-${workOrder.id}`}
               // style={{ "z-index": 100 }}
@@ -212,7 +214,7 @@ class Schedule extends React.Component {
 
               {returnToolTip()}
             </a>
-          </div>
+          // </div>
         );
         
           events.push({
