@@ -279,13 +279,13 @@ class Schedule extends React.Component {
 
         switch (type) {
           case 'fixed-width':
-              mapFixed(view, size);
+              mapFixed();
             break;
           case 'auto-width':
-              mapAuto(view, size);
+              mapAuto();
             break;
           default:
-            mapAuto(view, size);
+            mapAuto();
         }
 
 
@@ -303,7 +303,7 @@ class Schedule extends React.Component {
           events[j].classList.remove("compact-event");
         }
 
-        mapEvents(view, size)
+        // mapEvents(view, size)
         // this.setState({ size: "full" }, () => this.mapCalEvents(this.state.view, this.state.size));
         // this.setState({ size: "full" });
       }
@@ -323,7 +323,7 @@ class Schedule extends React.Component {
           events[j].classList.remove("full-event");
         }
         
-        mapEvents(view, size)
+        // mapEvents(view, size)
         // this.setState({size: "compact"}, () => this.mapCalEvents(this.state.view, this.state.size))
         // this.setState({size: "compact"})
       }
