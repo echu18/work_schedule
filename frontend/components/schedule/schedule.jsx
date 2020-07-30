@@ -62,7 +62,7 @@ class Schedule extends React.Component {
         },
         () => this.mapCalEvents(this.state.view, this.state.size)
       );
-      this.addBtnEventListeners(this.mapCalEvents)
+      this.addBtnEventListeners()
     }
 
   }
@@ -136,10 +136,14 @@ class Schedule extends React.Component {
         let location = locations[workOrder.location_id];
         
         function formatTime(time) {
-          return new Date(time).toLocaleTimeString([], {
-            hour: "2-digit",
-            minute: "2-digit",
-          });
+          return new Date(time)
+            .toLocaleTimeString([], {
+              hour: "2-digit",
+              minute: "2-digit",
+            })
+            .replace(/^0(?:0:0?)?/, "");
+
+          // return date.replace(/^0(?:0:0?)?/, "");
         }
 
         function returnToolTip(){
@@ -164,20 +168,22 @@ class Schedule extends React.Component {
                 className={view === "month" ? "compact-event" : "full-event"}
               >
                 {/* {(view === "day" && size !== 'compact') ?  */}
-                {(view === "day") ? 
-                  (<div>
-                    <p>{`Duration: ${workOrder.duration} mins`}</p>
-                    <p>{`Location: ${location.name} (${location.city})`}</p>
+                {view === "day" ? (
+                  <div>
+                    <p>{`${location.name} (${location.city})`}</p>
+                    {/* <p>{`${location.city})`}</p> */}
+                    <p>{`$${workOrder.price} | ${workOrder.duration} mins`}</p>
                     {/* <p>{`City: ${location.city}`}</p> */}
-                    <p>{`Price: $${workOrder.price}`}</p>
-                  </div>) : 
-
-                  (<div><p>
-                    {formatTime(startTime)} - {formatTime(endTime)} |{" "}
-                    {location.name} {location.city} | {technician.name}
-                  </p>
-                  </div>) 
-                }
+                    {/* <p>{` $${workOrder.price}`}</p> */}
+                  </div>
+                ) : (
+                  <div>
+                    <p>
+                      {formatTime(startTime)} {" | "} 
+                      {location.name} ({location.city}) - {technician.name}
+                    </p>
+                  </div>
+                )}
               </div>
             );
           }
@@ -234,7 +240,7 @@ class Schedule extends React.Component {
     // }
 
 
-    addBtnEventListeners(mapEvents){
+    addBtnEventListeners(){
       let btnGroup = document.getElementsByClassName("rbc-btn-group");
       // let navBtns = btnGroup[0];
       let viewBtns = btnGroup[1];
@@ -289,45 +295,37 @@ class Schedule extends React.Component {
         }
 
 
-      function mapFixed(view){
-        for (let i=0; i< elements.length; i++){
-          $(elements[i]).css("min-width", "")
-          $(elements[i]).css("min-width", "400px")
-        }         
+        function mapFixed(view){
+          for (let i=0; i< elements.length; i++){
+            $(elements[i]).css("min-width", "")
+            $(elements[i]).css("min-width", "400px")
+          }         
 
-        let events = document.getElementsByClassName("compact-event");
-        if (events.length === 0) return;
+          // let events = document.getElementsByClassName("compact-event");
+          // if (events.length === 0) return;
 
-        for (let j = 0; j < events.length; j++) {
-          events[j].classList.add("full-event");
-          events[j].classList.remove("compact-event");
+          // for (let j = 0; j < events.length; j++) {
+          //   events[j].classList.add("full-event");
+          //   events[j].classList.remove("compact-event");
+          // }
         }
-
-        // mapEvents(view, size)
-        // this.setState({ size: "full" }, () => this.mapCalEvents(this.state.view, this.state.size));
-        // this.setState({ size: "full" });
-      }
       
-      function mapAuto(){
-        for (let i=0; i< elements.length; i++){
-          $(elements[i]).css("min-width", "")
-          $(elements[i]).css("width", "100%")
-        }         
+        function mapAuto(){
+          for (let i=0; i< elements.length; i++){
+            $(elements[i]).css("min-width", "")
+            $(elements[i]).css("width", "100%")
+          }         
 
-        let events = document.getElementsByClassName("full-event");
-        if (events.length === 0) return;
+          // let events = document.getElementsByClassName("full-event");
+          // if (events.length === 0) return;
 
 
-        for (let j = 0; j < events.length; j++) {
-          events[j].classList.add("compact-event")
-          events[j].classList.remove("full-event");
+          // for (let j = 0; j < events.length; j++) {
+          //   events[j].classList.add("compact-event")
+          //   events[j].classList.remove("full-event");
+          // }
         }
-        
-        // mapEvents(view, size)
-        // this.setState({size: "compact"}, () => this.mapCalEvents(this.state.view, this.state.size))
-        // this.setState({size: "compact"})
       }
-    }
     }
 
 
@@ -493,7 +491,7 @@ class Schedule extends React.Component {
               defaultDate={new Date(2019, 9, 1)}
               popup={true}
               // step={7.5}
-              step={15}
+              // step={15}
               min={dayStartTime()}
               max={dayEndTime()}
               style={{ height: 800 }}
