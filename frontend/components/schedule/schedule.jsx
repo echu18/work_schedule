@@ -19,10 +19,11 @@ class Schedule extends React.Component {
       technicians:[],
       workOrders: [],
       events: [],
-      view: ""
+      view: "month"
     };
     // this.workOrderList = this.workOrderList.bind(this);
-    this.handleEvent = this.handleEvent.bind(this);
+    // this.handleEvent = this.handleEvent.bind(this);
+    this.changeEventView = this.changeEventView.bind(this);
   }
 
   componentDidMount(){
@@ -36,7 +37,7 @@ class Schedule extends React.Component {
               locations: this.props.locations,
               technicians: this.props.technicians,
               workOrders: this.props.workOrders,
-            }, () => this.mapCalEvents())
+            }, () => this.mapCalEvents(this.state.view))
           )
         
   }
@@ -50,7 +51,7 @@ class Schedule extends React.Component {
           technicians: this.props.technicians,
           workOrders: this.props.workOrders,
         },
-        () => this.mapCalEvents()
+        () => this.mapCalEvents(this.state.view)
       );
     }
   }
@@ -76,24 +77,26 @@ class Schedule extends React.Component {
 //     }
 //   }
 
-  
+    changeEventView(e){
+      this.setState({view: e}, ()=> this.mapCalEvents(this.state.view))
+    }
 
  
-    mapCalEvents() {
+    mapCalEvents(view) {
       if (
         this.state.workOrders.length < 1 ||
         this.state.locations.length < 1 ||
         this.state.technicians.length < 1
-      )
-        return;
+      ) return;
+
+
+      let technicians = this.state.technicians;
+      let locations = this.state.locations;
+
       let events = []
 
-      
-      let locations = this.state.locations;
-      let technicians = this.state.technicians;
-
       this.state.workOrders.forEach(workOrder => {
-        // let workOrder = Object.values(this.state.workOrders)[i];
+
         let startTime = new Date(workOrder.time)
         let startHours = startTime.getHours();
         let startMinutes = startTime.getMinutes();
@@ -132,77 +135,101 @@ class Schedule extends React.Component {
           </ReactTooltip>;
         }
 
+        // function eventDetails(view){
+        //   // let view = this.state.view;
+
+        //   const full = (
+        //       <div id={`work-order-${workOrder.id}`} className="full-event">
+        //         <p>{`Duration: ${workOrder.duration} mins`}</p>
+        //         <p>{`Location: ${location.name}`}</p>
+        //         <p>{`City: ${location.city}`}</p>
+        //         <p>{`Price: $${workOrder.price}`}</p>
+        //       </div> )
+
+
+        
+          function eventDetails() {
+            
+            return (
+              <div id={`work-order-${workOrder.id}`} className={view === "month" ? "compressed-event" : "full-event"}>
+                {view === "month" ? 
+                  (<p>
+                    {formatTime(startTime)} - {formatTime(endTime)} |{" "}
+                    {location.name} {location.city} | {technician.name}
+                  </p>) : 
+                  (
+                    <div>
+                      <p>{`Duration: ${workOrder.duration} mins`}</p>
+                      <p>{`Location: ${location.name}`}</p>
+                      <p>{`City: ${location.city}`}</p>
+                      <p>{`Price: $${workOrder.price}`}</p>
+                    </div>
+                  )
+                }
+              </div>
+            )
+          }
+
+
+          // switch (view) {
+          //   case "day":
+          //     return full;
+          //   case "month":
+          //     return compressed;
+          //   default:
+          //     return full;
+          // }
+        
+
+
         
         let title = (
-          // <div className="event-container">
+          <div className="event-container">
             <a
-              className="tooltip"
+            className='tooltip'
+              // className={this.state.event === "month" ? 'compressed-event' : 'full-event' }
               data-tip="React-tooltip"
               data-for={`tooltip-${workOrder.id}`}
-              style={{ "z-index": 100 }}
+              // style={{ "z-index": 100 }}
             >
-              <div id={`work-order-${workOrder.id}`} className="event-title">
+              
+              {eventDetails()}
+              {/* <div id={`work-order-${workOrder.id}`} className="event-title">
                 <p>{`Duration: ${workOrder.duration} mins`}</p>
                 <p>{`Location: ${location.name}`}</p>
                 <p>{`City: ${location.city}`}</p>
                 <p>{`Price: $${workOrder.price}`}</p>
-              </div>
+              </div> */}
+
 
               {returnToolTip()}
             </a>
-          // </div>
+          </div>
         );
         
           events.push({
             id: `work-order-${workOrder.id}`,
-            // title: `Start: ${hours}:${minutes}`,
             title: title,
             resourceId: `tech-${workOrder.technician_id}`,
-            // start: time,
-            // end: (time + workOrder.duration),
             start: new Date(startYear, startMonth, startDate, startHours, startMinutes),
             end: new Date(endYear, endMonth, endDate, endHours, endMinutes),
             // desc: `${location.name}-${location.city}`,
           });
         
       })
-
-    //     events.push({
-    //   id: 0,
-    //   title: "All Day Event very long title",
-    //   start: new Date(2020, 6, 28, 10, 30),
-    //   end: new Date(2020, 6, 28, 12, 0),
-    //   resourceId: "tech-1",
-    // },
-    // {
-    //   id: 1,
-    //   title: "Long Event",
-    //   start: new Date(2020, 6, 28, 13, 30),
-    //   end: new Date(2020, 6, 28, 15, 0),
-    //   resourceId: "tech-2",
-    // },
-
-    // {
-    //   id: 2,
-    //   title: "DTS STARTS",
-    //   start: new Date(2020, 6, 28, 17, 0, 0),
-    //   end: new Date(2020, 6, 28, 19, 0, 0),
-    //   resource: "tech-3",
-    // })
-
       this.setState({events: events})
     }
 
 
 
 
-    handleEvent(e){
-      // let eventDivId = e.title.props.id;
-      // let event = document.getElementById(eventDivId);
+    // handleEvent(e){
+    //   // let eventDivId = e.title.props.id;
+    //   // let event = document.getElementById(eventDivId);
 
-      let element = document.getElementsByClassName('rbc-selected')[0]
-      debugger
-    }
+    //   let element = document.getElementsByClassName('rbc-selected')[0]
+    //   debugger
+    // }
 
 
 
@@ -413,7 +440,7 @@ class Schedule extends React.Component {
               style={{ height: 800 }}
               onSelectEvent={(event) => this.handleEvent(event)}
 
-              // onView={changeMinWidth(this.view)}
+              onView={(event)=>this.changeEventView(event)}
             />
           </div>
         ) : null}
