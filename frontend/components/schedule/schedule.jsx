@@ -19,11 +19,14 @@ class Schedule extends React.Component {
       technicians:[],
       workOrders: [],
       events: [],
-      view: "month"
+      view: "month",
+      size: "compact"
     };
     // this.workOrderList = this.workOrderList.bind(this);
     // this.handleEvent = this.handleEvent.bind(this);
     this.changeEventView = this.changeEventView.bind(this);
+    this.mapCalEvents = this.mapCalEvents.bind(this);
+    this.addBtnEventListeners = this.addBtnEventListeners.bind(this);
   }
 
   componentDidMount(){
@@ -37,13 +40,19 @@ class Schedule extends React.Component {
               locations: this.props.locations,
               technicians: this.props.technicians,
               workOrders: this.props.workOrders,
-            }, () => this.mapCalEvents(this.state.view))
+            }, () => this.mapCalEvents(this.state.view, this.state.size))
           )
         
   }
 
 
   componentDidUpdate(prevProps, prevState){
+    let thisLocations = Object.values(this.props.locations).length > 0
+    let thisTechnicians = Object.values(this.props.technicians).length > 0
+    let thisWorkOrders = Object.values(this.props.workOrders).length > 0
+
+    
+    // if ((prevProps !== this.props) && (thisLocations && thisTechnicians && thisWorkOrders)) {
     if (prevProps !== this.props) {
       this.setState(
         {
@@ -51,9 +60,11 @@ class Schedule extends React.Component {
           technicians: this.props.technicians,
           workOrders: this.props.workOrders,
         },
-        () => this.mapCalEvents(this.state.view)
+        () => this.mapCalEvents(this.state.view, this.state.size)
       );
+      this.addBtnEventListeners(this.mapCalEvents)
     }
+
   }
 
 //   handleDataType(e) {
@@ -78,25 +89,33 @@ class Schedule extends React.Component {
 //   }
 
     changeEventView(e){
-      this.setState({view: e}, ()=> this.mapCalEvents(this.state.view))
+      this.setState({view: e}, ()=> this.mapCalEvents(this.state.view, this.state.size))
     }
 
  
-    mapCalEvents(view) {
+    mapCalEvents(view, size) {
+      // if (
+      //   this.state.workOrders.length < 1 ||
+      //   this.state.locations.length < 1 ||
+      //   this.state.technicians.length < 1
+      // ) return;
+      
+      
+  
+      let technicians = this.state.technicians;
+      let locations = this.state.locations;
+      let workOrders = this.state.workOrders;
+
       if (
-        this.state.workOrders.length < 1 ||
-        this.state.locations.length < 1 ||
-        this.state.technicians.length < 1
+        Object.values(technicians).length < 1 || Object.values(locations).length < 1 || Object.values(workOrders).length < 1
       ) return;
 
 
-      let technicians = this.state.technicians;
-      let locations = this.state.locations;
-
       let events = []
-
-      this.state.workOrders.forEach(workOrder => {
-
+      for (let i=0; i < Object.values(workOrders).length; i++) {
+        
+        let workOrder = Object.values(workOrders)[i]
+        
         let startTime = new Date(workOrder.time)
         let startHours = startTime.getHours();
         let startMinutes = startTime.getMinutes();
@@ -111,11 +130,12 @@ class Schedule extends React.Component {
         let endYear = endTime.getFullYear();
         let endMonth = endTime.getMonth();
         let endDate = endTime.getDate();
-
+        
+        
         let technician = technicians[workOrder.technician_id];
         let location = locations[workOrder.location_id];
         
-        function formatTime(time){
+        function formatTime(time) {
           return new Date(time).toLocaleTimeString([], {
             hour: "2-digit",
             minute: "2-digit",
@@ -123,78 +143,60 @@ class Schedule extends React.Component {
         }
 
         function returnToolTip(){
+
           return <ReactTooltip id={`tooltip-${workOrder.id}`} place="left" type="dark" effect="float">
-            
-            <p>{formatTime(startTime)} - {formatTime(endTime)}</p>
+              <p>{formatTime(startTime)} - {formatTime(endTime)}</p>
 
-             {/* Interpolated variables for readability */}
-            <p>{`Technician: ${technician.name}`}</p>
-            <p>{`Duration: ${workOrder.duration} mins`}</p>
-            <p>{`Location: ${location.name} (${location.city})`}</p>
-            <p>{`Price: $${workOrder.price}`}</p>
-          </ReactTooltip>;
-        }
+              {/* Interpolated variables for readability */}
+              <p>{`Technician: ${technician.name}`}</p>
+              <p>{`Duration: ${workOrder.duration} mins`}</p>
+              <p>{`Location: ${location.name} (${location.city})`}</p>
+              <p>{`Price: $${workOrder.price}`}</p>
+            </ReactTooltip>;
+          }
 
-        // function eventDetails(view){
-        //   // let view = this.state.view;
-
-        //   const full = (
-        //       <div id={`work-order-${workOrder.id}`} className="full-event">
-        //         <p>{`Duration: ${workOrder.duration} mins`}</p>
-        //         <p>{`Location: ${location.name}`}</p>
-        //         <p>{`City: ${location.city}`}</p>
-        //         <p>{`Price: $${workOrder.price}`}</p>
-        //       </div> )
-
-
-        
+ 
           function eventDetails() {
             
             return (
-              <div id={`work-order-${workOrder.id}`} className={view === "month" ? "compressed-event" : "full-event"}>
-                {view === "month" ? 
-                  (<p>
+              <div
+                id={`work-order-${workOrder.id}`}
+                className={view === "month" ? "compact-event" : "full-event"}
+              >
+                {/* {(view === "day" && size !== 'compact') ?  */}
+                {(view === "day") ? 
+                  (<div>
+                    <p>{`Duration: ${workOrder.duration} mins`}</p>
+                    <p>{`Location: ${location.name} (${location.city})`}</p>
+                    {/* <p>{`City: ${location.city}`}</p> */}
+                    <p>{`Price: $${workOrder.price}`}</p>
+                  </div>) : 
+
+                  (<div><p>
                     {formatTime(startTime)} - {formatTime(endTime)} |{" "}
                     {location.name} {location.city} | {technician.name}
-                  </p>) : 
-                  (
-                    <div>
-                      <p>{`Duration: ${workOrder.duration} mins`}</p>
-                      <p>{`Location: ${location.name}`}</p>
-                      <p>{`City: ${location.city}`}</p>
-                      <p>{`Price: $${workOrder.price}`}</p>
-                    </div>
-                  )
+                  </p>
+                  </div>) 
                 }
               </div>
-            )
+            );
           }
 
-
-          // switch (view) {
-          //   case "day":
-          //     return full;
-          //   case "month":
-          //     return compressed;
-          //   default:
-          //     return full;
-          // }
-        
 
 
         
         let title = (
-          <div className="event-container">
+          // <div className="event-container">
             <a
             className='tooltip'
-              // className={this.state.event === "month" ? 'compressed-event' : 'full-event' }
+              // className={this.state.event === "month" ? 'compact-event' : 'full-event' }
               data-tip="React-tooltip"
               data-for={`tooltip-${workOrder.id}`}
               // style={{ "z-index": 100 }}
             >
               
               {eventDetails()}
-              {/* <div id={`work-order-${workOrder.id}`} className="event-title">
+              {/* <div id={`work-order-${workOrder.id}`} className="full-event">
                 <p>{`Duration: ${workOrder.duration} mins`}</p>
                 <p>{`Location: ${location.name}`}</p>
                 <p>{`City: ${location.city}`}</p>
@@ -204,19 +206,20 @@ class Schedule extends React.Component {
 
               {returnToolTip()}
             </a>
-          </div>
+          // </div>
         );
+
         
-          events.push({
-            id: `work-order-${workOrder.id}`,
-            title: title,
-            resourceId: `tech-${workOrder.technician_id}`,
-            start: new Date(startYear, startMonth, startDate, startHours, startMinutes),
-            end: new Date(endYear, endMonth, endDate, endHours, endMinutes),
-            // desc: `${location.name}-${location.city}`,
-          });
-        
-      })
+        events.push({
+          id: `work-order-${workOrder.id}`,
+          title: title,
+          // resourceId: `tech-${workOrder.technician_id === 1 ? "1" : workOrder.technician_id + 1 }`,
+          resourceId: `tech-${workOrder.technician_id}`,
+          start: new Date(startYear, startMonth, startDate, startHours, startMinutes),
+          end: new Date(endYear, endMonth, endDate, endHours, endMinutes),
+          // desc: `${location.name}-${location.city}`,
+        });
+      }
       this.setState({events: events})
     }
 
@@ -228,11 +231,104 @@ class Schedule extends React.Component {
     //   // let event = document.getElementById(eventDivId);
 
     //   let element = document.getElementsByClassName('rbc-selected')[0]
-    //   debugger
     // }
 
 
+    addBtnEventListeners(mapEvents){
+      let btnGroup = document.getElementsByClassName("rbc-btn-group");
+      // let navBtns = btnGroup[0];
+      let viewBtns = btnGroup[1];
 
+      if (viewBtns) {
+        let children = viewBtns.children;
+
+        for (let i=0; i < children.length; i++){
+          let child = children[i];
+
+          if (child.innerHTML === "Day" && child.className === "rbc-active") {
+              changeColumn('fixed-width');
+          }
+          
+          switch (child.innerHTML){
+            case 'Day':
+              child.addEventListener('click', e=> {e.preventDefault(); changeColumn('fixed-width')} );
+              child.addEventListener('dblclick', e=> {e.preventDefault(); changeColumn('auto-width')} );
+              break;
+            case 'Month':
+              child.addEventListener('click', e=> {e.preventDefault(); changeColumn('auto-width')} );
+              break;
+            case 'Week':
+              child.addEventListener('click', e=> {e.preventDefault(); changeColumn('auto-width')} );
+              break;
+            default:
+              child.addEventListener('click', e=> {e.preventDefault(); changeColumn('auto-width')} );
+          }
+        } 
+      }
+
+
+       const columnClasses = ['.rbc-time-view', '.rbc-row', '.rbc-time-view-resources', '.rbc-day-slot']
+
+
+      const view = this.state.view
+      const size = this.state.size
+
+
+      function changeColumn(type){
+        let elements = columnClasses;
+
+        switch (type) {
+          case 'fixed-width':
+              mapFixed(view, size);
+            break;
+          case 'auto-width':
+              mapAuto(view, size);
+            break;
+          default:
+            mapAuto(view, size);
+        }
+
+
+      function mapFixed(view){
+        for (let i=0; i< elements.length; i++){
+          $(elements[i]).css("min-width", "")
+          $(elements[i]).css("min-width", "400px")
+        }         
+
+        let events = document.getElementsByClassName("compact-event");
+        if (events.length === 0) return;
+
+        for (let j = 0; j < events.length; j++) {
+          events[j].classList.add("full-event");
+          events[j].classList.remove("compact-event");
+        }
+
+        mapEvents(view, size)
+        // this.setState({ size: "full" }, () => this.mapCalEvents(this.state.view, this.state.size));
+        // this.setState({ size: "full" });
+      }
+      
+      function mapAuto(){
+        for (let i=0; i< elements.length; i++){
+          $(elements[i]).css("min-width", "")
+          $(elements[i]).css("width", "100%")
+        }         
+
+        let events = document.getElementsByClassName("full-event");
+        if (events.length === 0) return;
+
+
+        for (let j = 0; j < events.length; j++) {
+          events[j].classList.add("compact-event")
+          events[j].classList.remove("full-event");
+        }
+        
+        mapEvents(view, size)
+        // this.setState({size: "compact"}, () => this.mapCalEvents(this.state.view, this.state.size))
+        // this.setState({size: "compact"})
+      }
+    }
+    }
 
 
 
@@ -272,7 +368,7 @@ class Schedule extends React.Component {
 
     for (let i=0; i < technicians.length; i++){
       let technician = technicians[i];
-
+      
       resources.push({id:`tech-${technician.id}`, title: `${technician.name}`})
     }
     return resources;
@@ -295,132 +391,93 @@ class Schedule extends React.Component {
   
 
 
-  const columnClasses = [
-    '.rbc-time-view', '.rbc-row', '.rbc-time-view-resources', '.rbc-day-slot'
-    // '.rbc-time-view', '.rbc-row', '.rbc-time-view-resources', '.rbc-day-slot'
-  ]
+   
 
-  function columnClassElements(){
-    let elementGroup = [];
+ 
+    // let btnGroup = document.getElementsByClassName("rbc-btn-group");
+    // // let navBtns = btnGroup[0];
+    // let viewBtns = btnGroup[1];
 
-    for (let i=0; i < columnClasses.length; i++){
-      let elements = document.getElementsByClassName(columnClasses[i])
+    // if (viewBtns) {
+    //   let children = viewBtns.children;
 
-      elementGroup = elementGroup.concat(Array.from(elements));
-    }
-    return elementGroup;
-  }
+    //   for (let i=0; i < children.length; i++){
+    //     let child = children[i];
 
-
-    let btnGroup = document.getElementsByClassName("rbc-btn-group");
-    // let navBtns = btnGroup[0];
-    let viewBtns = btnGroup[1];
-
-    if (viewBtns) {
-      let children = viewBtns.children;
-
-      for (let i=0; i < children.length; i++){
-        let child = children[i];
+    //     if (child.innerHTML === "Day" && child.className === "rbc-active") {
+    //         changeColumn('fixed-width');
+    //     }
         
-
-        if (child.innerHTML === "Day" && child.className === "rbc-active") {
-            changeColumn('fixed-width');
-        }
-
-
-        switch (child.innerHTML){
-          case 'Day':
-            child.addEventListener('click', e=> {e.preventDefault(); changeColumn('fixed-width')} );
-            child.addEventListener('dblclick', e=> {e.preventDefault(); changeColumn('auto-width')} );
-            break;
-          case 'Week':
-            child.addEventListener('click', e=> {e.preventDefault(); changeColumn('auto-width')} );
-            break;
-          default:
-            child.addEventListener('click', e=> {e.preventDefault(); changeColumn('auto-width')} );
-        }
-
-      } 
-    }
+    //     switch (child.innerHTML){
+    //       case 'Day':
+    //         child.addEventListener('click', e=> {e.preventDefault(); changeColumn('fixed-width')} );
+    //         child.addEventListener('dblclick', e=> {e.preventDefault(); changeColumn('auto-width')} );
+    //         break;
+    //       case 'Month':
+    //         child.addEventListener('click', e=> {e.preventDefault(); changeColumn('auto-width')} );
+    //         break;
+    //       case 'Week':
+    //         child.addEventListener('click', e=> {e.preventDefault(); changeColumn('auto-width')} );
+    //         break;
+    //       default:
+    //         child.addEventListener('click', e=> {e.preventDefault(); changeColumn('auto-width')} );
+    //     }
+    //   } 
     
-    function changeColumn(type){
-      let elements = columnClasses;
+    
+    
+    
 
-      switch (type) {
-        case 'fixed-width':
-          mapFixed();
-          break;
-        case 'auto-width':
-          mapAuto();
-          break;
-        default:
-          mapAuto();
-      }
-
-        function mapFixed(){
-          for (let j=0; j< elements.length; j++){
-            $(elements[j]).css("min-width", "")
-            $(elements[j]).css("min-width", "450px")
-          }         
-        }
-        
-        function mapAuto(){
-          for (let j=0; j< elements.length; j++){
-            $(elements[j]).css("min-width", "")
-            $(elements[j]).css("width", "100%")
-          }         
-        }
-    }
+    
   
-    let customEvent = [
-      {
-        id: 0,
-        title: "All Day Event very long title",
-        allDay: true,
-        start: new Date(2020, 6, 28, 8, 0),
-        end: new Date(2020, 6, 28, 12, 0),
-        resourceId: "tech-1",
-      },
-      {
-        id: 1,
-        title: "Long Event",
-        start: new Date(2020, 6, 28, 14, 0),
-        end: new Date(2020, 6, 28, 17, 0),
-        resourceId: "tech-2",
-      },
+    // let testEvents = [
+    //   {
+    //     id: 0,
+    //     title: "All Day Event very long title",
+    //     allDay: true,
+    //     start: new Date(2020, 6, 28, 8, 0),
+    //     end: new Date(2020, 6, 28, 12, 0),
+    //     resourceId: "tech-1",
+    //   },
+    //   {
+    //     id: 1,
+    //     title: "Long Event",
+    //     start: new Date(2020, 6, 28, 14, 0),
+    //     end: new Date(2020, 6, 28, 17, 0),
+    //     resourceId: "tech-2",
+    //   },
 
-      {
-        id: 2,
-        title: "DTS STARTS",
-        start: new Date(2020, 6, 29, 10, 30, 0),
-        end: new Date(2020, 6, 29, 12, 30, 0),
-        resourceId: "tech-3",
-      },
+    //   {
+    //     id: 2,
+    //     title: "DTS STARTS",
+    //     start: new Date(2020, 6, 29, 10, 30, 0),
+    //     end: new Date(2020, 6, 29, 12, 30, 0),
+    //     resourceId: "tech-3",
+    //   },
 
-      {
-        id: 3,
-        title: "DTS ENDS",
-        start: new Date(2020, 6, 30, 14, 30, 0),
-        end: new Date(2020, 6, 30, 17, 30, 0),
-        resourceId: "tech-4",
-      },
-    ];
+    //   {
+    //     id: 3,
+    //     title: "DTS ENDS",
+    //     start: new Date(2020, 6, 30, 14, 30, 0),
+    //     end: new Date(2020, 6, 30, 17, 30, 0),
+    //     resourceId: "tech-4",
+    //   },
+    // ];
 
     // let calComponents = {
     //     views : {day: true, month: true},  
-    //     events: customEvent 
+    //     events: testEvents 
     // }
   
     return (
       <div>
         <h3>Schedule</h3>
 
-        {this.state.workOrders.length > 0 ? (
+        {Object.values(this.state.workOrders).length > 0 ? (
           <div>
             <Calendar
               selectable
-              resources={mapCalResources(this.state.technicians)}
-
+              resources={mapCalResources(Object.values(this.state.technicians))}
               // {...calComponents}
 
               events={this.state.events}
@@ -430,17 +487,18 @@ class Schedule extends React.Component {
               endAccessor="end"
               defaultDate={new Date()}
               // views={["day", "week", "month"]}
-              views = {{day: true, month: true}}
+              views={{ day: true, month: true }}
               // defaultView="day"
               defaultView={Views.MONTH}
+              defaultDate={new Date(2019, 9, 1)}
               popup={true}
               // step={7.5}
+              step={15}
               min={dayStartTime()}
               max={dayEndTime()}
               style={{ height: 800 }}
-              onSelectEvent={(event) => this.handleEvent(event)}
-
-              onView={(event)=>this.changeEventView(event)}
+              // onSelectEvent={(event) => this.handleEvent(event)}
+              onView={(event) => this.changeEventView(event)}
             />
           </div>
         ) : null}
