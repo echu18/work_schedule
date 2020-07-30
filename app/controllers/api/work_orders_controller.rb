@@ -2,6 +2,8 @@
 class Api::WorkOrdersController < ApplicationController
     # include Rails.application.routes.url_helpers
     require 'date'
+    require 'tzinfo'
+
 
     def index
         @work_orders = WorkOrder.all
@@ -35,20 +37,26 @@ class Api::WorkOrdersController < ApplicationController
 
         if @import_data && @import_data.length > 0
             @import_data.each do |import|
-                
-                filtered_params = {id: import["id"], technician_id: import["technician_id"], location_id: import["location_id"], time: DateTime.strptime(import["time"], '%m/%d/%y %H:%M'),
+
+                # Specify time zone for DateTime.strptime so that it gets converted from PST/PDT to be stored in UTC
+                time_zone = 'Pacific Daylight Time (US & Canada)'
+
+                filtered_params = {id: import["id"], technician_id: import["technician_id"], location_id: import["location_id"], time: DateTime.strptime(import["time"]+"#{time_zone}", '%m/%d/%y %H:%M %z'),
                                     duration: import["duration"], price: import["price"]}
 
-                # filtered_params[:time] = DateTime.strptime(import[:time], '%m/%d/%y %H:%M')
+
+                # Example
+                # d = DateTime.strptime("10/1/19 6:00 AM", '%m/%d/%y %H:%M %z')
             
                 @work_order = WorkOrder.new(filtered_params)
 
                 if !@work_order.save
                     render json: @work_order.errors.full_messages, status: 401
+                    return;
                 end
             end
-            render :show
         end
+        render :show
     end
 
 

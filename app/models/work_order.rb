@@ -17,5 +17,4 @@ class WorkOrder < ApplicationRecord
 
     belongs_to :technician, foreign_key: :technician_id, class_name: :Technician
     belongs_to :location, foreign_key: :location_id, class_name: :Location
-
 end

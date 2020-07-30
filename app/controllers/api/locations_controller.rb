@@ -48,10 +48,11 @@ class Api::LocationsController < ApplicationController
 
                 if !@location.save
                     render json: @location.errors.full_messages, status: 401
+                return;
                 end
             end
-            render :show
         end
+        render :show
     end
 
 

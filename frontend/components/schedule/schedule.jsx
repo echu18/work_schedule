@@ -1,7 +1,7 @@
 import React from "react";
 import ReactDOM from "react-dom";
 
-import { Calendar, momentLocalizer } from "react-big-calendar";
+import { Calendar, Views, momentLocalizer } from "react-big-calendar";
 import moment from "moment";
 import ReactTooltip from "react-tooltip";
 
@@ -18,7 +18,8 @@ class Schedule extends React.Component {
       locations: [],
       technicians:[],
       workOrders: [],
-      events: []
+      events: [],
+      view: ""
     };
     // this.workOrderList = this.workOrderList.bind(this);
     this.handleEvent = this.handleEvent.bind(this);
@@ -79,60 +80,77 @@ class Schedule extends React.Component {
 
  
     mapCalEvents() {
-      if (this.state.workOrders.length < 1 || this.state.locations.length < 1 ) return;
+      if (
+        this.state.workOrders.length < 1 ||
+        this.state.locations.length < 1 ||
+        this.state.technicians.length < 1
+      )
+        return;
       let events = []
 
       
       let locations = this.state.locations;
+      let technicians = this.state.technicians;
 
       this.state.workOrders.forEach(workOrder => {
         // let workOrder = Object.values(this.state.workOrders)[i];
         let startTime = new Date(workOrder.time)
-        let startHours = startTime.getUTCHours();
-        let startMinutes = startTime.getUTCMinutes();
-        let startYear = startTime.getUTCFullYear()
-        let startMonth = startTime.getUTCMonth()
-        let startDate = startTime.getUTCDate()
+        let startHours = startTime.getHours();
+        let startMinutes = startTime.getMinutes();
+        let startYear = startTime.getFullYear()
+        let startMonth = startTime.getMonth()
+        let startDate = startTime.getDate()
 
-        
         
         let endTime = new Date(startTime.getTime()+1000*60*60*(workOrder.duration/60))
-        let endHours = endTime.getUTCHours();
-        let endMinutes = endTime.getUTCMinutes();
-        let endYear = endTime.getUTCFullYear();
-        let endMonth = endTime.getUTCMonth();
-        let endDate = endTime.getUTCDate();
+        let endHours = endTime.getHours();
+        let endMinutes = endTime.getMinutes();
+        let endYear = endTime.getFullYear();
+        let endMonth = endTime.getMonth();
+        let endDate = endTime.getDate();
 
+        let technician = technicians[workOrder.technician_id];
         let location = locations[workOrder.location_id];
         
-        debugger
+        function formatTime(time){
+          return new Date(time).toLocaleTimeString([], {
+            hour: "2-digit",
+            minute: "2-digit",
+          });
+        }
+
+        function returnToolTip(){
+          return <ReactTooltip id={`tooltip-${workOrder.id}`} place="left" type="dark" effect="float">
+            
+            <p>{formatTime(startTime)} - {formatTime(endTime)}</p>
+
+             {/* Interpolated variables for readability */}
+            <p>{`Technician: ${technician.name}`}</p>
+            <p>{`Duration: ${workOrder.duration} mins`}</p>
+            <p>{`Location: ${location.name} (${location.city})`}</p>
+            <p>{`Price: $${workOrder.price}`}</p>
+          </ReactTooltip>;
+        }
+
+        
         let title = (
-          <a data-tip="React-tooltip" style={{ "z-index": 100 }}>
-            <div id={`work-order-${workOrder.id}`} className="event-title">
-              <p>{`Duration: ${workOrder.duration} mins`}</p>
-              <p>{`Location: ${location.name}`}</p>
-              <p>{`City: ${location.city}`}</p>
-              <p>{`Price: $${workOrder.price}`}</p>
-            </div>
+          // <div className="event-container">
+            <a
+              className="tooltip"
+              data-tip="React-tooltip"
+              data-for={`tooltip-${workOrder.id}`}
+              style={{ "z-index": 100 }}
+            >
+              <div id={`work-order-${workOrder.id}`} className="event-title">
+                <p>{`Duration: ${workOrder.duration} mins`}</p>
+                <p>{`Location: ${location.name}`}</p>
+                <p>{`City: ${location.city}`}</p>
+                <p>{`Price: $${workOrder.price}`}</p>
+              </div>
 
-
-
-            <ReactTooltip place="left" type="dark" effect="float">
-              {/* <p>{`${hours}:${minutes}`-`${newHours}:${newMinutes}`}</p> */}
-              {/* <p>{`${hours}:${minutes}`}</p> */}
-
-              <p>{`Start at: ${startHours.toString()}:${startMinutes.toString()}`}</p>
-              {/* <p>{`End at: ${newTime}`}</p> */}
-              <p></p>
-              <p>{`Duration: ${workOrder.duration} mins`}</p>
-              <p>{`Location: ${location.name}`}</p>
-              <p>{`City: ${location.city}`}</p>
-              <p>{`Price: $${workOrder.price}`}</p>
-            </ReactTooltip>
-          </a>
-          // `Start at ${time}
-          // Location: ${location.name}
-          // City: ${location.city}`
+              {returnToolTip()}
+            </a>
+          // </div>
         );
         
           events.push({
@@ -248,21 +266,23 @@ class Schedule extends React.Component {
       return date;
   }
   
+
+
   const columnClasses = [
     '.rbc-time-view', '.rbc-row', '.rbc-time-view-resources', '.rbc-day-slot'
     // '.rbc-time-view', '.rbc-row', '.rbc-time-view-resources', '.rbc-day-slot'
   ]
 
-    function columnClassElements(){
-      let elementGroup = [];
+  function columnClassElements(){
+    let elementGroup = [];
 
-      for (let i=0; i < columnClasses.length; i++){
-        let elements = document.getElementsByClassName(columnClasses[i])
+    for (let i=0; i < columnClasses.length; i++){
+      let elements = document.getElementsByClassName(columnClasses[i])
 
-        elementGroup = elementGroup.concat(Array.from(elements));
-      }
-      return elementGroup;
+      elementGroup = elementGroup.concat(Array.from(elements));
     }
+    return elementGroup;
+  }
 
 
     let btnGroup = document.getElementsByClassName("rbc-btn-group");
@@ -325,8 +345,44 @@ class Schedule extends React.Component {
         }
     }
   
+    let customEvent = [
+      {
+        id: 0,
+        title: "All Day Event very long title",
+        allDay: true,
+        start: new Date(2020, 6, 28, 8, 0),
+        end: new Date(2020, 6, 28, 12, 0),
+        resourceId: "tech-1",
+      },
+      {
+        id: 1,
+        title: "Long Event",
+        start: new Date(2020, 6, 28, 14, 0),
+        end: new Date(2020, 6, 28, 17, 0),
+        resourceId: "tech-2",
+      },
 
+      {
+        id: 2,
+        title: "DTS STARTS",
+        start: new Date(2020, 6, 29, 10, 30, 0),
+        end: new Date(2020, 6, 29, 12, 30, 0),
+        resourceId: "tech-3",
+      },
 
+      {
+        id: 3,
+        title: "DTS ENDS",
+        start: new Date(2020, 6, 30, 14, 30, 0),
+        end: new Date(2020, 6, 30, 17, 30, 0),
+        resourceId: "tech-4",
+      },
+    ];
+
+    // let calComponents = {
+    //     views : {day: true, month: true},  
+    //     events: customEvent 
+    // }
   
     return (
       <div>
@@ -334,23 +390,24 @@ class Schedule extends React.Component {
 
         {this.state.workOrders.length > 0 ? (
           <div>
-            
-
-
             <Calendar
+              selectable
               resources={mapCalResources(this.state.technicians)}
-              // events={[mapCalEvents(this.state.workOrders, this.state.locations)]}
+
+              // {...calComponents}
+
               events={this.state.events}
-              // events={events}
               localizer={localizer}
               culture="en-US"
               startAccessor="start"
               endAccessor="end"
               defaultDate={new Date()}
-              views={["day", "week", "month"]}
-              // views={['day', 'week', 'month']}
-              defaultView="day"
-              step={7.5}
+              // views={["day", "week", "month"]}
+              views = {{day: true, month: true}}
+              // defaultView="day"
+              defaultView={Views.MONTH}
+              popup={true}
+              // step={7.5}
               min={dayStartTime()}
               max={dayEndTime()}
               style={{ height: 800 }}

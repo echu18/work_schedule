@@ -24,7 +24,6 @@ class Api::TechniciansController < ApplicationController
     def import_data
         @import_data = JSON.parse(params[:import_data])
 
-        debugger
         if @import_data && @import_data.length > 0
             @import_data.each do |import|
                 
@@ -34,10 +33,11 @@ class Api::TechniciansController < ApplicationController
 
                 if !@technician.save
                     render json: @technician.errors.full_messages, status: 401
+                return;
                 end
             end
-            render :show
         end
+        render :show
     end
 
 

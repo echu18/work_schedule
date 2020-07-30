@@ -1,21 +1,38 @@
   @import 'react-big-calendar/lib/sass/styles';
 
 
-// .rbc-row, .rbc-day-slot {
-//     min-width: 250px;
-//   }
+// // .rbc-row, .rbc-day-slot {
+// //     min-width: 250px;
+// //   }
 
-  // .rbc-time-view,.rbc-time-view-resources {
-  //   min-width: 100%;
-  // }
+//   // .rbc-time-view,.rbc-time-view-resources {
+//   //   min-width: 100%;
+//   // }
  
  
-  // .rbc-time-view, .rbc-row, .rbc-time-view-resources, .rbc-day-slot {
-  //   min-width: 250px !important;
-  // }
+//   // .rbc-time-view, .rbc-row, .rbc-time-view-resources, .rbc-day-slot {
+//   //   min-width: 250px !important;
+//   // }
 
-
+// .event-container {
+//   display: flex;
+//   justify-content: center;
+//   align-items: flex-start;
+//   position: relative;
+//   min-height: 20px;
+//   min-width: 100%;
+//   border: 1px solid greenyellow;
+//   font-size: 12px;
+// }
 
   .event-title {
+    margin-top: -10px;
+    padding: 0;
+
+    // position: absolute;
+    // left: 0;
+    // top: 0;
     border: 1px solid red;
+    width: 100%;
+    height: 100%;
   }
