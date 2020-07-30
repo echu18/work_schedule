@@ -6,8 +6,8 @@ import {fetchAllWorkOrders, fetchWorkOrder} from '../../actions/work_order_actio
 
 const mapStateToProps = (state, ownProps) => ({
     locations: state.entities.locations,
-    technicians: Object.values(state.entities.technicians),
-    workOrders: Object.values(state.entities.workOrders)
+    technicians: state.entities.technicians,
+    workOrders: state.entities.workOrders
 });
 
 const mapDispatchToProps = (dispatch) => ({

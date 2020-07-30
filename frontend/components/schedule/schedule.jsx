@@ -37,8 +37,9 @@ class Schedule extends React.Component {
               locations: this.props.locations,
               technicians: this.props.technicians,
               workOrders: this.props.workOrders,
-            }, () => this.mapCalEvents(this.state.view))
-          )
+            }
+            ))
+            this.mapCalEvents(this.state.view)
         
   }
 
@@ -50,10 +51,9 @@ class Schedule extends React.Component {
           locations: this.props.locations,
           technicians: this.props.technicians,
           workOrders: this.props.workOrders,
-        },
-        () => this.mapCalEvents(this.state.view)
-      );
-    }
+        }, () =>this.mapCalEvents(this.state.view)
+        );
+      }
   }
 
 //   handleDataType(e) {
@@ -83,19 +83,26 @@ class Schedule extends React.Component {
 
  
     mapCalEvents(view) {
+      let techArr = Object.values(this.state.technicians);
+      let locArr = Object.values(this.state.locations);
+      let workArr = Object.values(this.state.workOrders);
+
+      
       if (
-        this.state.workOrders.length < 1 ||
-        this.state.locations.length < 1 ||
-        this.state.technicians.length < 1
-      ) return;
+        workArr.length < 1 ||
+        locArr.length < 1 ||
+        techArr.length < 1
+      )
+        return;
 
 
       let technicians = this.state.technicians;
       let locations = this.state.locations;
-
       let events = []
 
-      this.state.workOrders.forEach(workOrder => {
+      // this.state.workOrders.forEach(workOrder => {
+      for (let i=0; i <  workArr.length; i++){
+        let workOrder = workArr[i]
 
         let startTime = new Date(workOrder.time)
         let startHours = startTime.getHours();
@@ -121,7 +128,8 @@ class Schedule extends React.Component {
             minute: "2-digit",
           });
         }
-
+        
+        
         function returnToolTip(){
           return <ReactTooltip id={`tooltip-${workOrder.id}`} place="left" type="dark" effect="float">
             
@@ -215,8 +223,7 @@ class Schedule extends React.Component {
             end: new Date(endYear, endMonth, endDate, endHours, endMinutes),
             // desc: `${location.name}-${location.city}`,
           });
-        
-      })
+      }
       this.setState({events: events})
     }
 
@@ -267,14 +274,22 @@ class Schedule extends React.Component {
 
 
   function mapCalResources(technicians){
-    if (!technicians) return;
+        debugger;
+
+    let techniciansArr = Object.values(technicians);
+
+    // if (techniciansArr.length === 0) return;
     let resources = [];
 
-    for (let i=0; i < technicians.length; i++){
-      let technician = technicians[i];
+    for (let i = 0; i < techniciansArr.length; i++) {
+      let technician = techniciansArr[i];
 
-      resources.push({id:`tech-${technician.id}`, title: `${technician.name}`})
+      resources.push({
+        id: `tech-${technician.id}`,
+        title: `${technician.name}`,
+      });
     }
+    debugger
     return resources;
   }
 
@@ -415,7 +430,7 @@ class Schedule extends React.Component {
       <div>
         <h3>Schedule</h3>
 
-        {this.state.workOrders.length > 0 ? (
+        {Object.values(this.state.workOrders).length > 0 ? (
           <div>
             <Calendar
               selectable
