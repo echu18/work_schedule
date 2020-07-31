@@ -1,0 +1,21 @@
+#app {
+    /* background: url(https://wallpapercave.com/wp/Sa9Wlwv.jpg); */
+    /* background-color: #17212C; */
+    background-color: #031a33e1;
+    /* background-color: #aa101a9d; */
+    padding: 20px 2%;
+    height: 100vh;
+}
+
+
+
+* {
+    font-family: 'Montserrat', sans-serif;
+    box-sizing: border-box;
+}
+
+
+html, body {
+    margin: 0;
+}
+

@@ -10,14 +10,17 @@ const App = () => (
   <div id="app">
 
     <div id="main">
-      <h3>Work Schedule</h3>
+      <nav className='navbar'>
+        <h3>Work Schedule</h3>
 
-      <UploadContainer />
+        <UploadContainer />
+      </nav>
+      
       <ScheduleContainer />
       
-      <Switch>
-        {/* <Route exact path="/" component={scheduleContainer} /> */}
-      </Switch>
+      {/* <Switch>
+        <Route exact path="/" component={scheduleContainer} />
+      </Switch> */}
 
     </div>
   </div>

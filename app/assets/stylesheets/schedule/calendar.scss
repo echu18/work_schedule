@@ -1,72 +1,96 @@
   @import 'react-big-calendar/lib/sass/styles';
 
 
-// // .rbc-row, .rbc-day-slot {
-// //     min-width: 250px;
-// //   }
-
-//   // .rbc-time-view,.rbc-time-view-resources {
-//   //   min-width: 100%;
-//   // }
- 
- 
-//   // .rbc-time-view, .rbc-row, .rbc-time-view-resources, .rbc-day-slot {
-//   //   min-width: 250px !important;
-//   // }
-
-
-
-
-
-
-// .event-container {
-//   display: flex;
-//   justify-content: center;
-//   align-items: flex-start;
-//   position: relative;
-//   // min-height: 20px;
-//   min-width: 100%;
-//   border: 1px solid greenyellow;
-//   font-size: 12px;
-// }
-
-
-  // .compressed-event {
-  //   // margin-top: -10px;
-  //   padding: 0;
-
-  //   // position: absolute;
-  //   // left: 0;
-  //   // top: 0;
-  //   width: 100%;
-  //   max-height: 20px;
-  //   border: 1px solid turquoise;
+  // h1, h2, h3, h4, h5, h6, span {
+  //     color: rgb(49, 49, 49);
   // }
 
-  // .full-event {
-  //   margin-top: -10px;
-  //   padding: 0;
+.rbc-toolbar-label {
+  position: absolute;
+  top: 30px;
+  font-size: 50px;
+  color: white;
+  text-shadow: rgb(49, 49, 49);
+}
 
-  //   // position: absolute;
-  //   // left: 0;
-  //   // top: 0;
-  //   border: 1px solid red;
-  //   width: 100%;
-  //   height: 100%;
-  // }
+.rbc-toolbar {
+  margin-bottom: 20px;
+  // border: 1px solid turquoise
+}
 
+
+.rbc-btn-group > button, #switch-view {
+  background-color: white;
+}
+
+.rbc-btn-group:first-of-type {
+  display: flex;
+  justify-content: space-around;
+  margin-right: 30px;
+}
+
+
+  .rbc-event {
+    white-space: nowrap;
+    overflow: hidden;
+    // background-color: #306fa7;
+    background-color: #d5d6d8;
+    width: 97%;
+    margin: 0 0 4px 0;
+    // color: rgba(255, 255, 255, 0.95);
+    color: rgba(46, 46, 46, 0.95);
+
+  }
+
+
+
+  .rbc-overlay {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    max-height: 400px;
+    padding: 20px;
+    border-radius: 5px;
+    // overflow-y: scroll;
+
+  }
+
+  .rbc-overlay-header {
+    padding: 5px 15px;
+  }
+
+  button:focus {
+    outline: none;
+  }
+
+  .rbc-month-header{
+    padding-top: 5px;
+  }
+
+  .rbc-month-view, .rbc-time-view {
+    // margin: 0 10px;
+    border-radius: 3px;
+    padding: 10px;
+    margin: 0 20px;
+    // border: 1px solid gainsboro;
+    background-color: white;
+  }
+
+
+  .rbc-timeslot-group {
+    align-items: center;
+  }
 
 
   .rbc-event-label {
-  font-size: 12px;
-  // font-family: 'Helvetica', sans-serif;
-  position: absolute;
-  top: 0;
-  border-bottom: 0.5px solid white;
-  border-right: 0.5px solid white;
-}
+    font-size: 12px;
+    // font-family: 'Helvetica', sans-serif;
+    position: absolute;
+    top: 0;
+    // border-bottom: 0.5px solid white;
+    // border-right: 0.5px solid white;
+  }
 
-// .rbc-event {}
 
 
   .compact-event {
@@ -74,16 +98,15 @@
     justify-content: flex-start;
     align-items: center;
     // margin-top: -10px;
-    padding: 0;
-    margin: 0;
+    padding: 3px 0 3px 0;
     font-size: 14px;
-    // position: absolute;
-    // left: 0;
-    // top: 0;
+
     width: 100%;
     max-height: 20px;
     border: 1px solid transparent;
   }
+
+  
 
   .full-event {
     font-family: 'Helvetica', sans-serif;
@@ -94,9 +117,49 @@
     justify-content: flex-start;
     font-size: 13px;
     min-width: 100%;
-    // height: 100%;
     min-height: 50px;
     line-height: 15px;
     overflow: hidden;
-    border: 1px solid red;
   }
+
+
+
+  .tooltip-availability {
+    opacity: 1 !important;
+  }
+
+  .tooltip-event {
+    opacity: 1 !important;
+    box-shadow: 3px 1px 3px rgba(117, 117, 117, 0.3);
+  }
+
+  .rbc-date-cell {
+    padding-top: 7px;
+    padding-bottom: 3px;
+  }
+  
+  .rbc-date-cell > a,  .rbc-date-cell > a:visited {
+    padding: 3px;
+    border-radius: 50%;
+  }
+
+  .rbc-date-cell > a:hover,  .rbc-date-cell > a:visited:hover {
+    // background-color: gainsboro;
+    color: white;
+    background-color: rgb(202, 120, 120);
+    // padding: 3px;
+    transition: all 0.2s ease-in-out;
+  }
+
+.rbc-row-segment {
+  display: flex;
+  justify-content: center;
+}
+
+
+  .rbc-row-segment > a {
+    padding: 3px;
+    color: rgb(49, 49, 49);
+  }
+
+  

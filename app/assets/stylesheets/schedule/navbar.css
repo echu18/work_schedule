@@ -1,0 +1,55 @@
+.upload-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-end;
+    border-radius: 3px;
+    /* margin-top: 20px; */
+    padding: 15px;
+    overflow: hidden;
+    background-color: white;
+    border: 1px solid gainsboro;
+}
+
+
+
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    /* padding: 0px 25px; */
+    /* border: 1px solid blue; */
+    margin: 0 35px;
+}
+
+.navbar > h3 {
+    font-weight: 400;
+    font-size: 30px;
+    /* margin-bottom: 50px; */
+    color: white;
+    text-shadow: rgb(49, 49, 49);
+}
+
+
+.upload-lower {
+    display: flex;
+    justify-content: flex-start;
+    margin-top: 10px;
+    width: 100%;
+    /* border: 1px solid green; */
+}
+
+.upload-select{
+    margin-right: 20px;
+    /* border: 1px solid greenyellow; */
+}
+
+
+.csv-reader-input {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: space-between;
+    width: 200px;
+    height: 50px;
+    /* border: 1px solid turquoise; */
+}

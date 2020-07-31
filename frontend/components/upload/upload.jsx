@@ -13,6 +13,7 @@ import CSVReader from "react-csv-reader";
      this.handleDataType = this.handleDataType.bind(this);
      this.handleFile = this.handleFile.bind(this);
      this.handleSubmit = this.handleSubmit.bind(this);
+     this.handleError = this.handleError.bind(this);
    }
 
    handleDataType(e) {
@@ -28,12 +29,19 @@ import CSVReader from "react-csv-reader";
        this.setState({fileData: data})
    }
 
+   handleError(){
+    alert('error')
+   }
+
    handleSubmit(e) {
        e.preventDefault();
        
      if (this.state.fileData && this.state.dataType !== "") {
        this.props.uploadFile(this.state.dataType, this.state.fileData);
      }
+    //  if (this.state.fileData && this.state.dataType !== "") {
+    //    this.props.uploadFile(this.state.dataType, this.state.fileData);
+    //  }
    }
 
    render() {
@@ -45,40 +53,34 @@ import CSVReader from "react-csv-reader";
      };
 
      return (
-       <div>
-         {/* <input
-                    type="file"
-                    id="upload-button"
-                    // style={{ display: "none" }}
-                    onChange={this.handleChange}
-                />
-
-                <button onClick={e => this.handleSubmit(e)}>Upload</button> */}
-
-
+       <div className="upload-container">
          <CSVReader
-           cssClass="csv-reader-input"
+           className="csv-reader-input"
            label="Upload CSV File"
            onFileLoaded={this.handleFile}
-           onError={this.handleDarkSideForce}
+           onError={this.handleError}
            parserOptions={papaparseOptions}
            inputId="ObiWan"
            inputStyle={{ color: "red" }}
          />
-         <select
-           name="file-type"
-           id=""
-           onChange={(e) => this.handleDataType(e)}
-         >
-           <option value="" disabled selected>
-             Select a filetype
-           </option>
-           <option value="technician">Technician</option>
-           <option value="location">Location</option>
-           <option value="work-order">Work Order</option>
-         </select>
 
-         <button onClick={(e) => this.handleSubmit(e)}>Upload</button>
+         <div className='upload-lower'>
+           <select
+             className="upload-select"
+             name="file-type"
+             id=""
+             onChange={(e) => this.handleDataType(e)}
+           >
+             <option value="" disabled selected>
+               Select a filetype
+             </option>
+             <option value="technician">Technician</option>
+             <option value="location">Location</option>
+             <option value="work-order">Work Order</option>
+           </select>
+
+           <button onClick={(e) => this.handleSubmit(e)}>Upload</button>
+         </div>
        </div>
      );
    }

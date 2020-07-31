@@ -1,9 +1,11 @@
 import React from "react";
 import ReactDOM from "react-dom";
+import { Link } from "react-router-dom";
 
 import { Calendar, Views, momentLocalizer } from "react-big-calendar";
 import moment from "moment";
 import ReactTooltip from "react-tooltip";
+// import { debug } from "webpack";
 
 
 
@@ -58,7 +60,30 @@ class Schedule extends React.Component {
             this.addToolbarBtns();
           }
         );
+    }
+
+    let switchViewBtn = document.getElementById('switch-view')
+    if (!!switchViewBtn){
+      if (prevState.view !== this.state.view){
+        // addActive(this.state.view)
+        if (this.state.view === "month") {
+          switchViewBtn.classList.remove("rbc-active");
+          switchViewBtn.style.backgroundColor = "white";
+        }
       }
+        switchViewBtn.addEventListener('click', () => addActive(this.state.view))
+    }
+    
+    function addActive(view){
+      // e.preventDefault();
+      if (view === 'day'){
+        switchViewBtn.style.backgroundColor = "";
+        switchViewBtn.classList.add('rbc-active')
+      } else if (view === 'month') {
+        switchViewBtn.classList.remove('rbc-active')
+        switchViewBtn.style.backgroundColor ='white'
+      }
+    }
   }
 
 
@@ -73,6 +98,7 @@ class Schedule extends React.Component {
       
       let switchViewBtn = document.createElement('button')
       switchViewBtn.textContent = 'Wide View'
+      switchViewBtn.id = 'switch-view'
 
       switchViewBtn.addEventListener('click', function(e){
         e.preventDefault()
@@ -123,7 +149,6 @@ class Schedule extends React.Component {
            }
          }
         }
-        
     }
     
 
@@ -185,9 +210,11 @@ class Schedule extends React.Component {
           return (
             <ReactTooltip
               id={`tooltip-${workOrder.id}`}
-              place={view === "month" ? "left" : "top"}
-              type="dark"
-              effect={"float"}
+              className="tooltip-event"
+              // place={view === "month" ? "left" : "top"}
+              place={"top"}
+              // type="dark"
+              // effect={"float"}
             >
               <h3>
                 {formatTime(startTime)} - {formatTime(endTime)}
@@ -227,17 +254,19 @@ class Schedule extends React.Component {
 
         
         let title = (
-          // <div className="event-container">
-            <a
-            className='tooltip'
-              data-tip="React-tooltip"
-              data-for={`tooltip-${workOrder.id}`}
-            >
-              
-              {eventDetails()}
-              {returnToolTip()}
-            </a>
-          // </div>
+          <a
+            className="tooltip-event"
+            data-tip="React-tooltip"
+            data-for={`tooltip-${workOrder.id}`}
+            type="dark"
+            data-border="true"
+            // data-background-color="white"
+            // data-border-color="#3174ad"
+            data-border-color="#dcdcdc"
+          >
+            {eventDetails()}
+            {returnToolTip()}
+          </a>
         );
         
           events.push({
@@ -410,91 +439,14 @@ class Schedule extends React.Component {
     }
   
 
-
-    // const columnClasses = ['.rbc-time-view', '.rbc-row', '.rbc-time-view-resources', '.rbc-day-slot']
-
-
-    // let btnGroup = document.getElementsByClassName("rbc-btn-group");
-    // let navBtns = btnGroup[0];
-    // let viewBtns = btnGroup[1];
-
-
-    // function addToolbarBtns(){
-    //   let switchViewBtn = document.createElement('button')
-    //   switchViewBtn.textContent = 'Wide View'
-
-    //   switchViewBtn.addEventListener('click', function(e){
-    //     e.preventDefault()
-    //       changeColumn("fixed-width");
-    //   })
-
-    //   if (viewBtns) {
-    //     viewBtns.parentElement.appendChild(switchViewBtn);
-    //   }
-    // }
-
-    // if (viewBtns) {
-    //   let children = viewBtns.children;
-
-    //   for (let i=0; i < children.length; i++){
-    //     let child = children[i];
-
-    //     if (child.innerHTML === "Day" && child.className === "rbc-active") {
-    //         changeColumn('auto-width');
-    //     }
-
-        // switch (child.innerHTML){
-        //   case 'Day':
-        //     // child.addEventListener('click', e=> {e.preventDefault(); changeColumn('fixed-width')} );
-        //     // child.addEventListener('dblclick', e=> {e.preventDefault(); changeColumn('auto-width')} );
-        //     break;
-        //   case 'Week':
-        //     child.addEventListener('click', e=> {e.preventDefault(); changeColumn('auto-width')} );
-        //     break;
-        //   default:
-        //     child.addEventListener('click', e=> {e.preventDefault(); changeColumn('auto-width')} );
-        // }
-    //   } 
-    // }
-    
-    // function changeColumn(type){
-    //   let elements = columnClasses;
-
-    //   switch (type) {
-    //     case 'fixed-width':
-    //       mapFixed();
-    //       break;
-    //     case 'auto-width':
-    //       mapAuto();
-    //       break;
-    //     default:
-    //       mapAuto();
-    //   }
-
-    //     function mapFixed(){
-    //       for (let j=0; j< elements.length; j++){
-    //         $(elements[j]).css("min-width", "")
-    //         $(elements[j]).css("min-width", "450px")
-    //       }         
-    //     }
-        
-    //     function mapAuto(){
-    //       for (let j=0; j< elements.length; j++){
-    //         $(elements[j]).css("min-width", "")
-    //         $(elements[j]).css("width", "100%")
-    //       }         
-    //     }
-    // }
-  
   
     return (
       <div>
         {/* <h3>Schedule</h3> */}
 
         {Object.values(this.state.workOrders).length > 0 ? (
-          <div>
-            <a
-              className="tooltip"
+            <div
+              className="tooltip-availability"
               data-tip=""
               data-for={`tooltip-availability`}
               data-event={"dblclick"}
@@ -510,7 +462,7 @@ class Schedule extends React.Component {
                 startAccessor="start"
                 endAccessor="end"
                 defaultDate={new Date()}
-                views={{ day: true, month: true }}
+                views={{ month: true, day: true }}
                 defaultView={Views.MONTH}
                 defaultDate={new Date(2019, 9, 1)}
                 popup={true}
@@ -518,11 +470,13 @@ class Schedule extends React.Component {
                 // step={7.5} 
                 min={dayStartTime()}
                 max={dayEndTime()}
-                style={{ height: 800, 'max-width': '99vw', padding: 10 }}
+                // style={{ maxHeight: '90vw', 'maxWidth': '99vw', padding: 15 }}
+                style={{ height:  '85vh', width: '95vw', padding: 15 }}
                 onView={(event) => this.changeEventView(event)}
               />
-            </a>
+            </div>
 
+) : null}
             { this.state.view === 'day' ?
               (<ReactTooltip
               id={`tooltip-availability`}
@@ -536,8 +490,6 @@ class Schedule extends React.Component {
                 {this.state.tooltipAvailability}
               </ReactTooltip>) : null
             }
-          </div>
-        ) : null}
       </div>
     );
   }
