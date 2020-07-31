@@ -25,13 +25,17 @@ class Schedule extends React.Component {
       tooltipAvailability: ""
     };
     // this.workOrderList = this.workOrderList.bind(this);
-    // this.handleEvent = this.handleEvent.bind(this);
+    this.handleEvent = this.handleEvent.bind(this);
     this.changeEventView = this.changeEventView.bind(this);
     this.handleSelectSlot = this.handleSelectSlot.bind(this)
     this.addToolbarBtns = this.addToolbarBtns.bind(this);
   }
 
   componentDidMount(){
+    //  let switchViewBtn = document.getElementById('switch-view');
+
+    // if (switchViewBtn) switchViewBtn.parentElement.removeChild(switchViewBtn);
+    
       this.props
         .fetchAllWorkOrders()
         .then(this.props.fetchAllTechnicians())
@@ -86,6 +90,12 @@ class Schedule extends React.Component {
     }
   }
 
+  // componentWillUnmount(){
+  //   let switchViewBtn = document.getElementById('switch-view');
+
+  //   switchViewBtn.parentElement.removeChild(switchViewBtn);
+  // }
+
 
   
   
@@ -93,7 +103,8 @@ class Schedule extends React.Component {
       const columnClasses = ['.rbc-time-view', '.rbc-row', '.rbc-time-view-resources', '.rbc-day-slot']
 
       let btnGroup = document.getElementsByClassName("rbc-btn-group");
-
+      // let toolbar = document.getElementsByClassName('rbc-toolbar')[0]
+      
       let viewBtns = btnGroup[1];
       
       let switchViewBtn = document.createElement('button')
@@ -106,7 +117,10 @@ class Schedule extends React.Component {
       })
 
       if (viewBtns) {
-        viewBtns.parentElement.appendChild(switchViewBtn);
+        
+        if (viewBtns.parentElement.querySelector('#switch-view') === null) {
+          viewBtns.parentElement.appendChild(switchViewBtn);
+        }
       
         let children = viewBtns.children;
 
@@ -222,8 +236,8 @@ class Schedule extends React.Component {
 
               {/* Interpolated variables for readability */}
               <p>{`Technician: ${technician.name}`}</p>
-              <p>{`Duration: ${workOrder.duration} mins`}</p>
               <p>{`Location: ${location.name} (${location.city})`}</p>
+              <p>{`Duration: ${workOrder.duration} mins`}</p>
               <p>{`Price: $${workOrder.price}`}</p>
             </ReactTooltip>
           );
@@ -234,21 +248,25 @@ class Schedule extends React.Component {
           function eventDetails() {
             
             return (
-              <div id={`work-order-${workOrder.id}`} className={view === "month" ? "compact-event" : "full-event"}>
-                {view === "month" ? 
-                  (<p>
-                      {formatTime(startTime)} {" | "} 
-                      {location.name} ({location.city}) - {technician.name}
-                  </p>) : 
-                  (
-                    <div>
-                        <p>{`${location.name} (${location.city})`}</p>
-                        <p>{`$${workOrder.price} | ${workOrder.duration} mins`}</p>
-                    </div>
-                  )
-                }
+              <div
+                id={`work-order-${workOrder.id}`}
+                className={view === "month" ? "compact-event" : "full-event"}
+              >
+                {view === "month" ? (
+                  <p>
+                    {formatTime(startTime)} {" | "}
+                    {location.name} ({location.city}) - {technician.name}
+                  </p>
+                ) : (
+                  <div>
+                    <strong>
+                      <p>{`${location.name} (${location.city})`}</p>
+                    </strong>
+                      <p>{`$${workOrder.price} - ${workOrder.duration} mins`}</p>
+                  </div>
+                )}
               </div>
-            )
+            );
           }
           
 
@@ -259,10 +277,10 @@ class Schedule extends React.Component {
             data-tip="React-tooltip"
             data-for={`tooltip-${workOrder.id}`}
             type="dark"
-            data-border="true"
+            // data-border="true"
             // data-background-color="white"
             // data-border-color="#3174ad"
-            data-border-color="#dcdcdc"
+            // data-border-color="#dcdcdc"
           >
             {eventDetails()}
             {returnToolTip()}
@@ -284,13 +302,9 @@ class Schedule extends React.Component {
 
 
 
-    // handleEvent(e){
-    //   // let eventDivId = e.title.props.id;
-    //   // let event = document.getElementById(eventDivId);
-
-    //   let element = document.getElementsByClassName('rbc-selected')[0]
-    //   debugger
-    // }
+    handleEvent(e){
+      return;
+    }
 
 
     handleSelectSlot(e){
@@ -454,7 +468,7 @@ class Schedule extends React.Component {
               <Calendar
                 selectable
                 onSelectSlot={(e) => this.handleSelectSlot(e)}
-                // onSelectEvent={(event) => this.handleEvent(e)}
+                onSelectEvent={(e) => this.handleEvent(e)}
                 resources={mapCalResources(this.state.technicians)}
                 events={this.state.events}
                 localizer={localizer}
@@ -471,7 +485,7 @@ class Schedule extends React.Component {
                 min={dayStartTime()}
                 max={dayEndTime()}
                 // style={{ maxHeight: '90vw', 'maxWidth': '99vw', padding: 15 }}
-                style={{ height:  '85vh', width: '95vw', padding: 15 }}
+                style={{ height:  850, width: '99vw', padding: 0, overflow: 'scroll' }}
                 onView={(event) => this.changeEventView(event)}
               />
             </div>
