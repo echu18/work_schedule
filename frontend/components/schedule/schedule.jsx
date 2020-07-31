@@ -303,11 +303,13 @@ class Schedule extends React.Component {
 
 
     handleEvent(e){
-      return;
+      debugger
+      this.setState({ tooltipAvailability: "" });
     }
 
 
     handleSelectSlot(e){
+      
       let resourceId = e.resourceId;
       let clickedTime = e.start;
 
@@ -321,9 +323,11 @@ class Schedule extends React.Component {
         )
       })
 
-      // if (filtered.length === 0) return;
+      filtered = filtered.sort(function (a, b) {
+        return a.start.getTime() - b.start.getTime();
+      });
 
-      let startTime, endTime, dayStartMS, dayEndMS, durationMS, msg, duration;
+      let startTime, endTime, overlap, overlapUpper, overlapLower, dayStartMS, dayEndMS, durationMS, msg, duration;
 
       dayStartMS = new Date(clickedTime.getFullYear(), clickedTime.getMonth(), clickedTime.getDate(), 5, 0).getTime();
       dayEndMS = new Date(clickedTime.getFullYear(), clickedTime.getMonth(), clickedTime.getDate(), 19, 0).getTime();
@@ -354,20 +358,93 @@ class Schedule extends React.Component {
           )} - ${convertDuration(dayEndMS)} `;
         }
       } else {
+        
         for (let i = 0; i < filtered.length - 1; i++) {
-          if (
-            clickedTime >= filtered[i].end &&
-            clickedTime <= filtered[i + 1].start
-          ) {
-            startTime = filtered[i].end.getTime();
-            endTime = filtered[i + 1].start.getTime();
+            let iEvent = filtered[i];
+            let jEvent = filtered[i+1];
+          
+            debugger
+
+          if (iEvent.end.getTime() > jEvent.start.getTime() || jEvent.end.getTime() < clickedTime) {
+            // if (jEvent.end.getTime() <= clickedTime){
+            //   startTime = jEvent.end.getTime()
+            // } else {
+              continue
+          } else if (clickedTime <= iEvent.end.getTime() && clickedTime < jEvent.start.getTime()) {
+            startTime = iEvent.end.getTime();
+            endTime = jEvent.start.getTime();
             durationMS = endTime - startTime;
-            duration = `${convertDuration(startTime)} - ${convertDuration(
-              endTime
-            )} `;
+            duration = `${convertDuration(startTime)} - ${convertDuration(endTime)} `;
+            break;
           }
-        }
-      }
+            
+            
+            else if (clickedTime < jEvent.start.getTime()){
+                startTime = iEvent.end.getTime();
+                endTime = jEvent.start.getTime();
+                durationMS = endTime - startTime;
+                duration = `${convertDuration(startTime)} - ${convertDuration(endTime)} `;
+                break;
+              }
+            }
+          }
+
+       
+
+
+
+
+            // if (iEvent.end.getTime() <= jEvent.start.getTime() || jEvent.end.getTime() <= clickedTime )  {
+            //   continue;
+            // } else if (iEvent.end.getTime() < jEvent.start.getTime()){
+            //   startTime = iEvent.end.getTime();
+            //   endTime = jEvent.start.getTime();
+
+
+              
+            // } else if (iEvent.end.getTime() <= clickedTime && clickedTime <= jEvent.start.getTime()){
+            //   startTime = iEvent.end.getTime();
+            //   endTime = jEvent.start.getTime();
+
+            //   durationMS = endTime - startTime;
+            //   duration = `${convertDuration(startTime)} - ${convertDuration(endTime)} `;
+            // }
+            
+            // } else {
+            //   startTime = iEvent.end.getTime();
+            //   endTime = jEvent.start.getTime();
+            //   durationMS = endTime - startTime;
+            //   duration = `${convertDuration(startTime)} - ${convertDuration(endTime)}`
+            // }
+
+
+            
+            // } else if (iEvent.end.getTime() <= clickedTime && clickedTime <= jEvent.start.getTime()){
+            //   startTime = iEvent.end.getTime();
+            //   endTime = jEvent.start.getTime();
+
+            //   durationMS = endTime - startTime;
+            //   duration = `${convertDuration(startTime)} - ${convertDuration(endTime)} `;
+            // } else {
+            //   continue;
+            // }
+            
+        // }
+      // }
+
+
+
+          // if (
+          //   clickedTime >= filtered[i].end &&
+          //   clickedTime <= filtered[i + 1].start
+          // ) {
+          //   startTime = filtered[i].end.getTime();
+          //   endTime = filtered[i + 1].start.getTime();
+          //   durationMS = endTime - startTime;
+          //   duration = `${convertDuration(startTime)} - ${convertDuration(
+          //     endTime
+          //   )} `;
+          // }
       
       msg = msg || `${convertHoursAndMinutes(durationMS)} (${convertMinutes(durationMS)} mins)`
       
@@ -396,11 +473,12 @@ class Schedule extends React.Component {
 
       const alertMsg = (
         <div>
+          <h3>Available Time</h3>
           <p>{duration ? duration : null}</p>
           <p>{msg}</p>
         </div>
         // `${duration} | ${msg}`
-      )
+      );
       this.setState({tooltipAvailability: alertMsg})
     }
 
@@ -500,7 +578,7 @@ class Schedule extends React.Component {
               effect="float"
               globalEventOff="click"
               >
-                <h3>Available Time</h3>
+                {/* <h3>Available Time</h3> */}
                 {this.state.tooltipAvailability}
               </ReactTooltip>) : null
             }
