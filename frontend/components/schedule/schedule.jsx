@@ -24,6 +24,7 @@ class Schedule extends React.Component {
     // this.workOrderList = this.workOrderList.bind(this);
     // this.handleEvent = this.handleEvent.bind(this);
     this.changeEventView = this.changeEventView.bind(this);
+    this.handleSelect = this.handleSelect.bind(this)
   }
 
   componentDidMount(){
@@ -56,26 +57,6 @@ class Schedule extends React.Component {
       }
   }
 
-//   handleDataType(e) {
-//     e.preventDefault();
-//     this.setState({ dataType: e.target.value });
-//     //     if (e.target.files.length) {
-//     //         this.setState({file: e.target.files[0]})
-//     //     }
-//   }
-
-//   handleFile(data, fileInfo) {
-//     console.log(data, fileInfo);
-//     this.setState({ fileData: data });
-//   }
-
-//   handleSubmit(e) {
-//     e.preventDefault();
-
-//     if (this.state.fileData && this.state.dataType !== "") {
-//       this.props.uploadFile(this.state.dataType, this.state.fileData);
-//     }
-//   }
 
     changeEventView(e){
       this.setState({view: e}, ()=> this.mapCalEvents(this.state.view))
@@ -100,7 +81,6 @@ class Schedule extends React.Component {
       let locations = this.state.locations;
       let events = []
 
-      // this.state.workOrders.forEach(workOrder => {
       for (let i=0; i <  workArr.length; i++){
         let workOrder = workArr[i]
 
@@ -126,7 +106,8 @@ class Schedule extends React.Component {
           return new Date(time).toLocaleTimeString([], {
             hour: "2-digit",
             minute: "2-digit",
-          });
+          }).replace(/^0(?:0:0?)?/, "");
+
         }
         
         
@@ -142,17 +123,6 @@ class Schedule extends React.Component {
             <p>{`Price: $${workOrder.price}`}</p>
           </ReactTooltip>;
         }
-
-        // function eventDetails(view){
-        //   // let view = this.state.view;
-
-        //   const full = (
-        //       <div id={`work-order-${workOrder.id}`} className="full-event">
-        //         <p>{`Duration: ${workOrder.duration} mins`}</p>
-        //         <p>{`Location: ${location.name}`}</p>
-        //         <p>{`City: ${location.city}`}</p>
-        //         <p>{`Price: $${workOrder.price}`}</p>
-        //       </div> )
 
 
         
@@ -176,21 +146,6 @@ class Schedule extends React.Component {
             )
           }
           
-          // <p>{`Duration: ${workOrder.duration} mins`}</p>
-          // <p>{`Location: ${location.name}`}</p>
-          // <p>{`City: ${location.city}`}</p>
-          // <p>{`Price: $${workOrder.price}`}</p>
-
-          // switch (view) {
-          //   case "day":
-          //     return full;
-          //   case "month":
-          //     return compact;
-          //   default:
-          //     return full;
-          // }
-        
-
 
         
         let title = (
@@ -241,7 +196,93 @@ class Schedule extends React.Component {
     // }
 
 
+    handleSelect(e){
+      let resourceId = e.resourceId;
+      let clickedTime = e.start;
 
+      // Filter - select events that match clicked column's resourceId (aka technician) AND date
+      let filtered = Object.values(this.state.events).filter(event => {
+        return (
+          (event.resourceId === resourceId) &&
+          (event.start.getDate() === e.start.getDate() ||event.end.getDate() === e.start.getDate()) &&
+          (event.start.getMonth() === e.start.getMonth() ||event.end.getMonth() === e.start.getMonth()) &&
+          (event.start.getFullYear() === e.start.getFullYear() ||event.end.getFullYear() === e.start.getFullYear()) 
+        )
+      })
+
+      if (filtered.length === 0) return;
+
+      let startTime, endTime, dayStartMS, dayEndMS, durationMS, msg, duration;
+
+      dayStartMS = new Date(clickedTime.getFullYear(), clickedTime.getMonth(), clickedTime.getDate(), 5, 0).getTime();
+      dayEndMS = new Date(clickedTime.getFullYear(), clickedTime.getMonth(), clickedTime.getDate(), 19, 0).getTime();
+
+
+
+      // 1) If clickedTime is before the first event, set 5am as the beginning of the day
+      // 2) Else if clickedTime is after last event, set 7pm as end of day
+      // 3) Else - get the difference of clickedTime's immediate neighbor events' endTime and StartTime for availabile duration
+
+      if (clickedTime <= filtered[0].start) {
+          if (clickedTime.getTime() < dayStartMS) {
+            msg = 'Outside of working hours'
+          } else {
+            durationMS = filtered[0].start.getTime() - dayStartMS;
+            duration = `${convertDuration(dayStartMS)} - ${convertDuration(filtered[0].start.getTime())}`
+          }
+      } else if (clickedTime >= filtered[filtered.length-1].end) {
+          if (clickedTime.getTime() > dayEndMS) {
+            msg = 'Outside of working hours'
+          } else {
+            durationMS = dayEndMS - filtered[filtered.length-1].end.getTime();
+            duration = `${convertDuration(filtered[filtered.length-1].end.getTime())} - ${convertDuration(dayEndMS)} `
+          }
+      } else {
+        for (let i =0; i < filtered.length-1; i++){
+          if ((clickedTime >= filtered[i].end) && (clickedTime <= filtered[i+1].start)){
+            startTime = filtered[i].end.getTime();
+            endTime = filtered[i+1].start.getTime();
+            durationMS = endTime - startTime;
+            duration = `${convertDuration(startTime)} - ${convertDuration(endTime)} `
+          }
+        }
+      }
+      
+      msg = msg || `${convertHoursAndMinutes(durationMS)} (${convertMinutes(durationMS)} mins)`
+      
+
+      function convertDuration(millisecTimeStamp) {
+        let time = new Date(millisecTimeStamp).toLocaleTimeString([], {
+          hour: "2-digit",
+          minute: "2-digit",
+        }).replace(/^0(?:0:0?)?/, "");
+        return time;
+      }
+
+
+      function convertHoursAndMinutes(millisec){
+        let totalMins = convertMinutes(millisec)
+        let calculatedHours = Math.floor(totalMins/60);
+        let calculatedMins = totalMins % 60
+        return `${calculatedHours} hrs ${calculatedMins} mins`
+      }
+    
+      
+      function convertMinutes(millisec) {
+        let minutes = Math.floor(millisec / 60000);
+        return minutes;
+      }
+
+      const alertMsg = (
+        // <div>
+        //   <p>{duration}</p>
+        //   <p>{msg}</p>
+        // </div>
+        `${duration} | ${msg}`
+      )
+
+      alert(alertMsg);
+    }
 
 
 
@@ -276,7 +317,6 @@ class Schedule extends React.Component {
 
 
   function mapCalResources(technicians){
-        debugger;
 
     let techniciansArr = Object.values(technicians);
 
@@ -291,7 +331,7 @@ class Schedule extends React.Component {
         title: `${technician.name}`,
       });
     }
-    debugger
+    
     return resources;
   }
 
@@ -436,6 +476,7 @@ class Schedule extends React.Component {
           <div>
             <Calendar
               selectable
+              onSelectSlot={e => this.handleSelect(e)}
               resources={mapCalResources(this.state.technicians)}
               // {...calComponents}
 
@@ -455,7 +496,7 @@ class Schedule extends React.Component {
               min={dayStartTime()}
               max={dayEndTime()}
               style={{ height: 800 }}
-              onSelectEvent={(event) => this.handleEvent(event)}
+              // onSelectEvent={(event) => this.handleEvent(event)}
               onView={(event) => this.changeEventView(event)}
             />
           </div>
@@ -481,93 +522,4 @@ export default Schedule;
 
 
     
-    // function mapCalEvents(workOrders, locations) {
-    //   if (workOrders.length < 1 || !locations ) return;
-      
-
-    //   for (let i = 0; i < workOrders.length; i++) {
-    //     // debugger
-    //     let workOrder = workOrders[i];
-    //     // let time = new Date(workOrder.time)
-    //     // let hours = time.getHours();
-    //     // let minutes = time.getMinutes();
-    //     let location = locations[workOrder.location_id];
-
-    //     events.push({
-    //       // id: `work-order-${workOrder.id}`,
-    //       // title: `Start: ${hours}:${minutes}`,
-    //       title: `Start: 10:30`,
-    //       resourceId: `tech-${workOrder.technician_id}`,
-    //       // start: time,
-    //       // end: (time + workOrder.duration),
-    //       start: new Date(2020, 6, 28, 10, 30),
-    //       end: new Date(2020, 6, 28, 12, 0),
-    //       // desc: `${location}`,
-    //     });
-    //   }
-
-    // //     events.concat([{
-    // //   id: 0,
-    // //   title: "All Day Event very long title",
-    // //   start: new Date(2020, 6, 28, 10, 30),
-    // //   end: new Date(2020, 6, 28, 12, 0),
-    // //   resourceId: "tech-1",
-    // // },
-    // // {
-    // //   id: 1,
-    // //   title: "Long Event",
-    // //   start: new Date(2020, 6, 28, 13, 30),
-    // //   end: new Date(2020, 6, 28, 15, 0),
-    // //   resourceId: "tech-2",
-    // // },
-
-    // // {
-    // //   id: 2,
-    // //   title: "DTS STARTS",
-    // //   start: new Date(2020, 6, 28, 17, 0, 0),
-    // //   end: new Date(2020, 6, 28, 19, 0, 0),
-    // //   resource: "tech-3",
-    // // }])
-
-    // debugger
-    //   // return Object.assign({}, events);
-    //   // return {event: events};
-    //   // return {events};
-    // }
-
-
-
-
-
-
-    //   let children = viewBtns.children;
-  //   for (let i=0; i < children.length; i++){
-  //     let child = children[i];
-      
-  //     if (child.innerHTML === "Day" && child.className === "rbc-active") {
-  //       let elements = columnClassElements();
-  //       elements.forEach((el) => el.setAttribute("style", "min-width: 250px !important;"));
-  //     }
-      
-  //     // updateCols(children[i])
-  //     if (child.innerHTML === 'Day'){
-  //       child.addEventListener('click', e=> {e.preventDefault(); 
-  //         debugger
-  //         let elements = columnClassElements();
-  //         elements.forEach((el) => el.setAttribute("style", "min-width: 250px !important;"));
-  //       })
-  //     }
-  //   }
-  // };
-  
-  // function updateCols(child){
     
-  //   if (child.innerHTML === 'Day' && child.className === 'rbc-active') {
-  //     // child.addEventListener('click', function(){
-  //       let elements = columnClassElements();
-  //       elements.forEach(el => el.setAttribute("style", "min-width: 250px;"))
-  //       // elements.forEach(el => el.setAttribute("style", "border: 1px solid red;"))
-  //     // })
-  //   }
-  // }
-  
