@@ -73,6 +73,10 @@
     outline: none;
   }
 
+  button:hover {
+    cursor: pointer;
+  }
+
   .rbc-month-header{
     padding-top: 5px;
   }
@@ -94,6 +98,10 @@
     padding-top: 5px;
     position: absolute;
     top: 0;
+  }
+
+  .rbc-header {
+    color: #803034c0; 
   }
 
 
