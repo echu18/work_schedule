@@ -303,7 +303,7 @@ class Schedule extends React.Component {
 
 
     handleEvent(e){
-      debugger
+      // Disables tooltip popup when dblclicking on event
       this.setState({ tooltipAvailability: "" });
     }
 
@@ -313,7 +313,7 @@ class Schedule extends React.Component {
       let resourceId = e.resourceId;
       let clickedTime = e.start;
 
-      // Filter - select events that match clicked column's resourceId (aka technician) AND date
+      // Filter - select events that match clicked slot's resourceId (aka technician) AND date
       let filtered = Object.values(this.state.events).filter(event => {
         return (
           (event.resourceId === resourceId) &&
@@ -327,7 +327,7 @@ class Schedule extends React.Component {
         return a.start.getTime() - b.start.getTime();
       });
 
-      let startTime, endTime, overlap, overlapUpper, overlapLower, dayStartMS, dayEndMS, durationMS, msg, duration;
+      let startTime, endTime, dayStartMS, dayEndMS, durationMS, msg, duration;
 
       dayStartMS = new Date(clickedTime.getFullYear(), clickedTime.getMonth(), clickedTime.getDate(), 5, 0).getTime();
       dayEndMS = new Date(clickedTime.getFullYear(), clickedTime.getMonth(), clickedTime.getDate(), 19, 0).getTime();
@@ -362,13 +362,13 @@ class Schedule extends React.Component {
         for (let i = 0; i < filtered.length - 1; i++) {
             let iEvent = filtered[i];
             let jEvent = filtered[i+1];
+
+          if ((clickedTime >= iEvent.start.getTime() && clickedTime < iEvent.end.getTime())){
+            return;
+          }
           
-            debugger
 
           if (iEvent.end.getTime() > jEvent.start.getTime() || jEvent.end.getTime() < clickedTime) {
-            // if (jEvent.end.getTime() <= clickedTime){
-            //   startTime = jEvent.end.getTime()
-            // } else {
               continue
           } else if (clickedTime <= iEvent.end.getTime() && clickedTime < jEvent.start.getTime()) {
             startTime = iEvent.end.getTime();
@@ -379,7 +379,7 @@ class Schedule extends React.Component {
           }
             
             
-            else if (clickedTime < jEvent.start.getTime()){
+            else if (clickedTime < jEvent.start.getTime() && clickedTime >= iEvent.end.getTime()){
                 startTime = iEvent.end.getTime();
                 endTime = jEvent.start.getTime();
                 durationMS = endTime - startTime;
