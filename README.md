@@ -131,8 +131,11 @@ The work schedule calendar is based on [React-Big-Calendar](https://github.com/j
 
 
 React Component Libraries Used:
+
 [react-big-calendar](https://github.com/jquense/react-big-calendar#react-big-calendar)
+
 [react-tooltip](https://www.npmjs.com/package/react-tooltip)
+
 [react-csv-reader](https://www.npmjs.com/package/react-csv-reader)
 
 
