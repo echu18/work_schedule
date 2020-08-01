@@ -8,6 +8,8 @@
 #  updated_at :datetime         not null
 #
 class Technician < ApplicationRecord
+    self.primary_key = 'id'
+
     validates :id, :name, presence: true
 
     has_many :work_orders, foreign_key: :technician_id, class_name: :WorkOrder
