@@ -27,7 +27,7 @@ Setup and Running the App Locally
 ### Seed Data
 The only seed data included are technicians named 'demo user', to demo the **wide day view** of the calendar. 
 
-User can directly upload csv files from the top right corner of the page. Day view will not display if Technicians, Locations and Work Orders have all been uploaded.
+User can directly upload csv files from the top right corner of the page. Day view will not display unless Technicians, Locations and Work Orders have all been uploaded.
 
 
 ---
@@ -77,7 +77,7 @@ Use the following buttons to navigate throughout the calendar:
 
 ``Day`` - switches current view to day view
 
-``Wide View`` - [Day view only] widens columns so users can see full width of events. Because columns have exanded, some technician columns will be hidden. They can be viewed by scrolling left and right on the calendar. Click on ``Month`` and then ``Day`` to reset the day view.
+``Wide View`` - [Day view only] widens columns so users can see full width of events. Because columns have expanded, some technician columns will be hidden. They can be viewed by scrolling left and right on the calendar. Click on ``Month`` and then ``Day`` to reset the day view.
 
 
 ---
@@ -89,7 +89,7 @@ Use the following buttons to navigate throughout the calendar:
 The month view displays the entire month's work orders (compact events) at a glance. 
 - Days that have a lot of work orders will have a ``+[number] more`` link - clicking on this will display a popup of all of that day's events.
 
-- **Hovering** over a compact event block in the month view will summon a tooltip that displays details of that work order.
+- **Hovering** over a compact event block in the month view will summon a popup that displays details of that work order.
 
 
 **Navigating to day view** 
@@ -117,7 +117,7 @@ The day view displays all technicians' work orders for the selected date.
 
 ### Available Time (day view only)
 
-- Double-clicking on any blank time slot (where there is no event) will summon a popup that displays the duration of available time between the previous and next work orders for that technician of that column.
+- Double-clicking on any blank time slot (where there is no event) will summon a popup that displays the duration of available time between the previous and next work orders for the technician of that column.
 
 - Click once anywhere on the page to hide the time availability popup
 
