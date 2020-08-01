@@ -2,7 +2,7 @@
 
 Work Schedule is a demo project that displays technicians' work order schedules all on one calendar view.
 
-It was built using Ruby on Rails, PostgreSQL, JavaScript, React (+ React-tooltip, React-big-calendar, React-csv-reader), HTML/CSS.
+Built with Ruby on Rails, PostgreSQL, JavaScript, React, HTML/CSS.
 
 
 ---
@@ -30,6 +30,7 @@ The only seed data included are technicians named 'demo user', to demo the **wid
 User can directly upload csv files from the top right corner of the page. Day view will not display if Technicians, Locations and Work Orders have all been uploaded.
 
 
+---
 
 
 
@@ -39,7 +40,7 @@ Features and Use
 
 ### Uploading CSV files
 
-The user can upload CSV files from the box in the top right corner.
+The user can upload **CSV files** from the box in the top right corner.
 
 Steps:
 
@@ -48,7 +49,7 @@ Steps:
 3) Click on the ``Upload`` button
 4) Success or error message will appear depending on upload status
 
-**Note: Both Technician files and Location files must be uploaded prior to uploading Work Orders.**
+**Note: Both Technician and Location data must be uploaded prior to uploading Work Order data.**
 
 
 ---  
@@ -79,7 +80,7 @@ Use the following buttons to navigate throughout the calendar:
 ``Wide View`` - [Day view only] widens columns so users can see full width of events. Because columns have exanded, some technician columns will be hidden. They can be viewed by scrolling left and right on the calendar. Click on ``Month`` and then ``Day`` to reset the day view.
 
 
---
+---
 
 ### Month View
 
@@ -125,6 +126,14 @@ The day view displays all technicians' work orders for the selected date.
 
 
 ---
+
+The work schedule calendar is based on [React-Big-Calendar](https://github.com/jquense/react-big-calendar#react-big-calendar) and was built with Ruby on Rails, PostgreSQL, JavaScript, React, and HTML/CSS.
+
+
+React Component Libraries Used:
+[react-big-calendar](https://github.com/jquense/react-big-calendar#react-big-calendar)
+[react-tooltip](https://www.npmjs.com/package/react-tooltip)
+[react-csv-reader](https://www.npmjs.com/package/react-csv-reader)
 
 
 
