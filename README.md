@@ -20,7 +20,7 @@ Setup and Running the App Locally
 ---
 
 1. ``bundle install`` and then ``npm install``.
-2. On the command line, use ``npm start`` to run the start script, then use ``rails s`` to start up the server.
+2. On the command line, use ``npm start`` to run the start script and start up webpack, then use ``rails s`` to start up the server.
 3. Navigate to ``localhose:3000`` in your web browser to view the app.
 
 
