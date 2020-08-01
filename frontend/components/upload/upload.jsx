@@ -16,7 +16,6 @@ import CSVReader from "react-csv-reader";
      this.handleDataType = this.handleDataType.bind(this);
      this.handleFile = this.handleFile.bind(this);
      this.handleSubmit = this.handleSubmit.bind(this);
-    //  this.handleError = this.handleError.bind(this);
      this.alertError = this.alertError.bind(this);
    }
 
@@ -81,7 +80,7 @@ import CSVReader from "react-csv-reader";
 
 
    handleSubmit(e, fileData, dataType, technicians, locations) {
-debugger
+
      let techCount = Object.values(technicians).length
      let locCount = Object.values(locations).length
 
@@ -136,9 +135,7 @@ debugger
      }
    }
 
-    //  if (this.state.fileData && this.state.dataType !== "") {
-    //    this.props.uploadFile(this.state.dataType, this.state.fileData);
-    //  }
+
 
    render() {
      const papaparseOptions = {

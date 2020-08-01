@@ -94,11 +94,3 @@ end
 
 
 
-
-# parsed_time = DateTime.strptime(work_order_params[:time], '%m/%d/%y %H:%M')
-# # parsed_time = Time.zone.parse(time)
-# @work_order = WorkOrder.new({id: work_order_params[:id], technician_id: work_order_params[:technician_id], location_id: work_order_params[:location_id], time: parsed_time, duration: work_order_params[:duration], price: work_order_params[:price]})
-
-
-# params.permit(:id, :technician_id, :location_id, :time, :duration, :price)
-# params.require(:work_order).permit(:id, :technician_id, :location_id, time: DateTime.strptime(params[:time], '%m/%d/%y %H:%M'), :duration, :price)

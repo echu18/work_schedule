@@ -37,15 +37,11 @@
 .rbc-event, .rbc-selected {
   white-space: nowrap;
   overflow: hidden;
-  // background-color: #306fa7;
   background-color: #d5d6d8 !important;
-  // background-color: #415d96 !important;
-  // background-color: #803034c0 !important;
   width: 98%;
   margin: 0 0 4px 0;
   border: 0.5px solid rgb(151, 151, 151);
   color: rgba(255, 255, 255, 0.623);
-  //  text-shadow: 1px 1px 1px  rgba(37, 37, 37, 0.493);
   color: rgba(46, 46, 46, 0.95);
 }
 
@@ -54,124 +50,121 @@
 }
 
 
-  .rbc-overlay {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    max-height: 400px;
-    padding: 20px;
-    border-radius: 5px;
-    // overflow-y: scroll;
-
-  }
-
-  .rbc-overlay-header {
-    padding: 5px 15px;
-  }
-
-  button:focus {
-    outline: none;
-  }
-
-  button:hover {
-    cursor: pointer;
-  }
-
-  .rbc-month-header{
-    padding-top: 5px;
-  }
-
-  .rbc-month-view, .rbc-time-view {
-    border-radius: 3px;
-    padding: 10px;
-    background-color: white;
-  }
-
-
-  .rbc-timeslot-group {
-    align-items: center;
-  }
-
-
-  .rbc-event-label {
-    font-size: 12px;
-    padding-top: 5px;
-    position: absolute;
-    top: 0;
-  }
-
-  .rbc-header {
-    color: #803034c0; 
-  }
-
-
-
-  .compact-event {
-    display: flex;
-    justify-content: flex-start;
-    align-items: center;
-    padding: 3px 0 3px 0;
-    font-size: 12px;
-
-    width: 100%;
-    max-height: 20px;
-    border: 1px solid transparent;
-  }
-
-  
-
-  .full-event {
-    font-family: 'Helvetica', sans-serif;
-    margin-top: 13px;
-    margin-bottom: 13px;
-
-    display: flex;
-    justify-content: flex-start;
-    font-size: 13px;
-    min-width: 100%;
-    min-height: 50px;
-    line-height: 15px;
-    overflow: hidden;
-  }
-
-
-
-  .tooltip-availability {
-    opacity: 1 !important;
-  }
-
-  .tooltip-event {
-    opacity: 1 !important;
-    box-shadow: 3px 1px 3px rgba(117, 117, 117, 0.3);
-  }
-
-  .rbc-date-cell {
-    padding-top: 7px;
-    padding-bottom: 3px;
-  }
-  
-  .rbc-date-cell > a,  .rbc-date-cell > a:visited {
-    padding: 3px;
-    border-radius: 50%;
-  }
-
-  .rbc-date-cell > a:hover,  .rbc-date-cell > a:visited:hover {
-    // background-color: gainsboro;
-    color: white;
-    background-color: rgb(202, 120, 120);
-    // padding: 3px;
-    transition: all 0.2s ease-in-out;
-  }
-
-.rbc-row-segment {
+.rbc-overlay {
   display: flex;
-  justify-content: center;
+  flex-direction: column;
+  align-items: center;
+  max-height: 400px;
+  padding: 20px;
+  border-radius: 5px;
+
+}
+
+.rbc-overlay-header {
+  padding: 5px 15px;
+}
+
+button:focus {
+  outline: none;
+}
+
+button:hover {
+  cursor: pointer;
+}
+
+.rbc-month-header{
+  padding-top: 5px;
+}
+
+.rbc-month-view, .rbc-time-view {
+  border-radius: 3px;
+  padding: 10px;
+  background-color: white;
 }
 
 
-  .rbc-row-segment > a {
-    padding: 3px;
-    color: rgb(49, 49, 49);
-  }
+.rbc-timeslot-group {
+  align-items: center;
+}
+
+
+.rbc-event-label {
+  font-size: 12px;
+  padding-top: 5px;
+  position: absolute;
+  top: 0;
+}
+
+.rbc-header {
+  color: #803034c0; 
+}
+
+
+
+.compact-event {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  padding: 3px 0 3px 0;
+  font-size: 12px;
+
+  width: 100%;
+  max-height: 20px;
+  border: 1px solid transparent;
+}
+
+  
+
+.full-event {
+  font-family: 'Helvetica', sans-serif;
+  margin-top: 13px;
+  margin-bottom: 13px;
+
+  display: flex;
+  justify-content: flex-start;
+  font-size: 13px;
+  min-width: 100%;
+  min-height: 50px;
+  line-height: 15px;
+  overflow: hidden;
+}
+
+
+
+.tooltip-availability {
+  opacity: 1 !important;
+}
+
+.tooltip-event {
+  opacity: 1 !important;
+  box-shadow: 3px 1px 3px rgba(117, 117, 117, 0.3);
+}
+
+.rbc-date-cell {
+  padding-top: 7px;
+  padding-bottom: 3px;
+}
+
+.rbc-date-cell > a,  .rbc-date-cell > a:visited {
+  padding: 3px;
+  border-radius: 50%;
+}
+
+.rbc-date-cell > a:hover,  .rbc-date-cell > a:visited:hover {
+  color: white;
+  background-color: rgb(202, 120, 120);
+  transition: all 0.2s ease-in-out;
+}
+
+.rbc-row-segment {
+display: flex;
+justify-content: center;
+}
+
+
+.rbc-row-segment > a {
+  padding: 3px;
+  color: rgb(49, 49, 49);
+}
 
   
