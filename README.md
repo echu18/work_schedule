@@ -1,24 +1,16 @@
-# README
+# Work Schedule
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+Work Schedule is a demo project that displays technicians' work order schedules all on one calendar view.
 
-Things you may want to cover:
+It was built using Ruby on Rails, PostgreSQL, JavaScript, React (+ React-tooltip, React-big-calendar, React-csv-reader), HTML/CSS
 
-* Ruby version
 
-* System dependencies
 
-* Configuration
+Use
+---
 
-* Database creation
-
-* Database initialization
-
-* How to run the test suite
-
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
+Note: the default date is set to October 1, 2019 for easier access to viewing sample events
+	- This can be changed with the ***the defaultDate*** prop within the Calendar component of schedule.jsx 
+	
+	
+	
