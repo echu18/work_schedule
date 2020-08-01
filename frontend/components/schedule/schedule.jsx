@@ -5,7 +5,6 @@ import { Link } from "react-router-dom";
 import { Calendar, Views, momentLocalizer } from "react-big-calendar";
 import moment from "moment";
 import ReactTooltip from "react-tooltip";
-// import { debug } from "webpack";
 
 
 
@@ -24,7 +23,6 @@ class Schedule extends React.Component {
       view: "month",
       tooltipAvailability: ""
     };
-    // this.workOrderList = this.workOrderList.bind(this);
     this.handleEvent = this.handleEvent.bind(this);
     this.changeEventView = this.changeEventView.bind(this);
     this.handleSelectSlot = this.handleSelectSlot.bind(this)
@@ -86,20 +84,13 @@ class Schedule extends React.Component {
     }
   }
 
-  // componentWillUnmount(){
-  //   let switchViewBtn = document.getElementById('switch-view');
-
-  //   switchViewBtn.parentElement.removeChild(switchViewBtn);
-  // }
-
-
+ 
   
   
    addToolbarBtns(){
       const columnClasses = ['.rbc-time-view', '.rbc-row', '.rbc-time-view-resources', '.rbc-day-slot']
 
       let btnGroup = document.getElementsByClassName("rbc-btn-group");
-      // let toolbar = document.getElementsByClassName('rbc-toolbar')[0]
       
       let viewBtns = btnGroup[1];
       
@@ -221,10 +212,7 @@ class Schedule extends React.Component {
             <ReactTooltip
               id={`tooltip-${workOrder.id}`}
               className="tooltip-event"
-              // place={view === "month" ? "left" : "top"}
               place={"top"}
-              // type="dark"
-              // effect={"float"}
             >
               <h3>
                 {formatTime(startTime)} - {formatTime(endTime)}
@@ -274,8 +262,6 @@ class Schedule extends React.Component {
             data-for={`tooltip-${workOrder.id}`}
             type="dark"
             // data-border="true"
-            // data-background-color="white"
-            // data-border-color="#3174ad"
             // data-border-color="#dcdcdc"
           >
             {eventDetails()}
@@ -289,7 +275,6 @@ class Schedule extends React.Component {
             resourceId: `tech-${workOrder.technician_id}`,
             start: new Date(startYear, startMonth, startDate, startHours, startMinutes),
             end: new Date(endYear, endMonth, endDate, endHours, endMinutes),
-            // desc: `${location.name}-${location.city}`,
           });
       }
       this.setState({events: events})
@@ -425,12 +410,6 @@ class Schedule extends React.Component {
 
 
   render() {
-    // if (
-    //   !this.props.locations ||
-    //   !this.props.technicians ||
-    //   !this.props.workOrders
-    // ) return null;
-      
     
     const localizer = momentLocalizer(moment);
 
@@ -438,7 +417,6 @@ class Schedule extends React.Component {
 
       let techniciansArr = Object.values(technicians);
 
-      // if (techniciansArr.length === 0) return;
       let resources = [];
 
       for (let i = 0; i < techniciansArr.length; i++) {
@@ -472,9 +450,6 @@ class Schedule extends React.Component {
   
     return (
       <div>
-        {/* <h3>Schedule</h3> */}
-
-        {/* {Object.values(this.state.workOrders).length > 0 ? ( */}
             <div
               className="tooltip-availability"
               data-tip=""
@@ -504,7 +479,7 @@ class Schedule extends React.Component {
                 onView={(event) => this.changeEventView(event)}
               />
             </div>
-            {/* ) : null} */}
+
             { this.state.view === 'day' ?
               (<ReactTooltip
               id={`tooltip-availability`}
@@ -514,7 +489,7 @@ class Schedule extends React.Component {
               effect="float"
               globalEventOff="click"
               >
-                {/* <h3>Available Time</h3> */}
+
                 {this.state.tooltipAvailability}
               </ReactTooltip>) : null
             }
