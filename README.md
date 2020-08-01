@@ -8,11 +8,13 @@ It was built using Ruby on Rails, PostgreSQL, JavaScript, React (+ React-tooltip
 
 
 
-Setup and Running Examples Locally
+Setup and Running the App Locally
 ---
 
 1. ``bundle install`` and then ``npm install``.
 2. On the command line, use ``npm start`` to run the start script, then use ``rails s`` to start up the server.
+3. Navigate to ``localhose:3000`` in your web browser to view the app.
+
 
 ### Seed Data
 The only seed data included are technicians named 'demo user', to demo the **wide day view** of the calendar. 
@@ -82,13 +84,23 @@ The month view displays the entire month's work orders (compact events) at a gla
 
 #### Day View
 
-The day view displays all technicians' work orders for the selected date. By default the day begins at 5:00 and ends at 19:00, but custom time ranges can be changed in the minAccessor and maxAccessor within the Calendar component of _schedule.jsx_.
+The day view displays all technicians' work orders for the selected date. 
 
 
-If the calendar cannot fit all technician columns onto the current page, the hidden technician columns can be accessed by scrolling right on the calendar day view (works with both regular and wide view).
+- By default the day begins at 5:00 and ends at 19:00, but custom time ranges can be changed in the minAccessor and maxAccessor within the Calendar component of _schedule.jsx_.
 
-Just like the month view, **hovering** over a full event in the day view will summon a tooltip that displays details of that work order. 
-	- Some work order events may be too short in duration (and thus have a smaller block on the calendar), for the event block
+
+- If the calendar cannot fit all technician columns onto the current page, the hidden technician columns can be accessed by scrolling right on the calendar day view (works with both regular and wide view).
+
+
+- Just like with the month view, **hovering** over a full event in the day view will summon a popup that displays details of that work order. Some work order events may be too short in duration (thus having a smaller block on the calendar), for the event block to display full details.
+
+#### Available Time
+
+- Double-clicking on any blank time slot (where there is no event) will summon a popup that displays the duration of available time between the previous and next work orders for that technician of that column.
+
+- Click once anywhere on the page to hide the time availability popup
+
 
 
 
