@@ -32,10 +32,6 @@ class Schedule extends React.Component {
   }
 
   componentDidMount(){
-    //  let switchViewBtn = document.getElementById('switch-view');
-
-    // if (switchViewBtn) switchViewBtn.parentElement.removeChild(switchViewBtn);
-    
       this.props
         .fetchAllWorkOrders()
         .then(this.props.fetchAllTechnicians())
@@ -60,7 +56,7 @@ class Schedule extends React.Component {
           locations: this.props.locations,
           technicians: this.props.technicians,
           workOrders: this.props.workOrders,
-        }, () => {this.mapCalEvents(this.state.view)
+        }, () => {this.mapCalEvents(this.state.view);
             this.addToolbarBtns();
           }
         );
@@ -389,63 +385,6 @@ class Schedule extends React.Component {
             }
           }
 
-       
-
-
-
-
-            // if (iEvent.end.getTime() <= jEvent.start.getTime() || jEvent.end.getTime() <= clickedTime )  {
-            //   continue;
-            // } else if (iEvent.end.getTime() < jEvent.start.getTime()){
-            //   startTime = iEvent.end.getTime();
-            //   endTime = jEvent.start.getTime();
-
-
-              
-            // } else if (iEvent.end.getTime() <= clickedTime && clickedTime <= jEvent.start.getTime()){
-            //   startTime = iEvent.end.getTime();
-            //   endTime = jEvent.start.getTime();
-
-            //   durationMS = endTime - startTime;
-            //   duration = `${convertDuration(startTime)} - ${convertDuration(endTime)} `;
-            // }
-            
-            // } else {
-            //   startTime = iEvent.end.getTime();
-            //   endTime = jEvent.start.getTime();
-            //   durationMS = endTime - startTime;
-            //   duration = `${convertDuration(startTime)} - ${convertDuration(endTime)}`
-            // }
-
-
-            
-            // } else if (iEvent.end.getTime() <= clickedTime && clickedTime <= jEvent.start.getTime()){
-            //   startTime = iEvent.end.getTime();
-            //   endTime = jEvent.start.getTime();
-
-            //   durationMS = endTime - startTime;
-            //   duration = `${convertDuration(startTime)} - ${convertDuration(endTime)} `;
-            // } else {
-            //   continue;
-            // }
-            
-        // }
-      // }
-
-
-
-          // if (
-          //   clickedTime >= filtered[i].end &&
-          //   clickedTime <= filtered[i + 1].start
-          // ) {
-          //   startTime = filtered[i].end.getTime();
-          //   endTime = filtered[i + 1].start.getTime();
-          //   durationMS = endTime - startTime;
-          //   duration = `${convertDuration(startTime)} - ${convertDuration(
-          //     endTime
-          //   )} `;
-          // }
-      
       msg = msg || `${convertHoursAndMinutes(durationMS)} (${convertMinutes(durationMS)} mins)`
       
 
@@ -477,7 +416,6 @@ class Schedule extends React.Component {
           <p>{duration ? duration : null}</p>
           <p>{msg}</p>
         </div>
-        // `${duration} | ${msg}`
       );
       this.setState({tooltipAvailability: alertMsg})
     }
@@ -536,7 +474,7 @@ class Schedule extends React.Component {
       <div>
         {/* <h3>Schedule</h3> */}
 
-        {Object.values(this.state.workOrders).length > 0 ? (
+        {/* {Object.values(this.state.workOrders).length > 0 ? ( */}
             <div
               className="tooltip-availability"
               data-tip=""
@@ -562,13 +500,11 @@ class Schedule extends React.Component {
                 // step={7.5} 
                 min={dayStartTime()}
                 max={dayEndTime()}
-                // style={{ maxHeight: '90vw', 'maxWidth': '99vw', padding: 15 }}
                 style={{ height:  '83vh', width: '99vw', padding: 0, overflow: 'scroll' }}
                 onView={(event) => this.changeEventView(event)}
               />
             </div>
-
-) : null}
+            {/* ) : null} */}
             { this.state.view === 'day' ?
               (<ReactTooltip
               id={`tooltip-availability`}

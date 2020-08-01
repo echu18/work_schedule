@@ -1,6 +1,6 @@
 
 
-json.partial! "api/technicians/technicians", technician: @technician
+json.partial! "api/technicians/technician", technician: @technician
 
 
 # json.work_orders do

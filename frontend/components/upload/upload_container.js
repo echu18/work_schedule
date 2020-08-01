@@ -3,6 +3,9 @@ import Upload from './upload';
 import {uploadFile} from '../../actions/upload_actions'
 
 const mapStateToProps = (state, ownProps) => ({
+    locations: state.entities.locations,
+    technicians: state.entities.technicians,
+    workOrders: state.entities.workOrders
 })
 
 const mapDispatchToProps = dispatch => ({
