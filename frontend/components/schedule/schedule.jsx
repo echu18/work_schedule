@@ -563,7 +563,7 @@ class Schedule extends React.Component {
                 min={dayStartTime()}
                 max={dayEndTime()}
                 // style={{ maxHeight: '90vw', 'maxWidth': '99vw', padding: 15 }}
-                style={{ height:  850, width: '99vw', padding: 0, overflow: 'scroll' }}
+                style={{ height:  '83vh', width: '99vw', padding: 0, overflow: 'scroll' }}
                 onView={(event) => this.changeEventView(event)}
               />
             </div>

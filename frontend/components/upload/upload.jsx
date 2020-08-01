@@ -13,36 +13,97 @@ import CSVReader from "react-csv-reader";
      this.handleDataType = this.handleDataType.bind(this);
      this.handleFile = this.handleFile.bind(this);
      this.handleSubmit = this.handleSubmit.bind(this);
-     this.handleError = this.handleError.bind(this);
+    //  this.handleError = this.handleError.bind(this);
+     this.alertError = this.alertError.bind(this);
    }
 
    handleDataType(e) {
-       e.preventDefault();
-       this.setState({ dataType: e.target.value });
-       //     if (e.target.files.length) {
-       //         this.setState({file: e.target.files[0]})
-       //     }
-   };
+     e.preventDefault();
+     this.setState({ dataType: e.target.value });
+   }
 
    handleFile(data, fileInfo) {
-       console.log(data, fileInfo);
-       this.setState({fileData: data})
+     console.log(data, fileInfo);
+     this.setState({ fileData: data });
    }
 
-   handleError(){
-    alert('error')
-   }
 
-   handleSubmit(e) {
-       e.preventDefault();
-       
-     if (this.state.fileData && this.state.dataType !== "") {
-       this.props.uploadFile(this.state.dataType, this.state.fileData);
-     }
+
+   alertError(errorType) {
+    switch (errorType) {
+      case "no-file":
+          alert("Please upload a file.");
+        break;
+      case "no-datatype":
+          alert("Please select a datatype");
+        break;
+      case "invalid-data":
+        alert('Data type does not match')
+        break;
+        case "unknown-error":
+          alert('Please refresh and try again.')
+        break;
+      default:
+    }
+
+
+  
+
+   }
+  
+
+   handleSubmit(e, fileData, dataType) {
+     e.preventDefault();
+     let data = Object.values(fileData);
+     
+     if (!fileData) {
+       this.alertError("no-file");
+       return;
+      } else if (dataType === "") {
+        this.alertError("no-datatype");
+        return;
+      } else if (!validData(data)) {
+        this.alertError("invalid-data");
+      } else {
+        this.props.uploadFile(dataType, fileData);
+      }
+      
+      
+      
+    function validData(data){  
+      let colNames;
+      switch (dataType) {
+        case "technician":
+          colNames = ['id', 'name']
+          break;
+        case "location":
+          colNames = ['id', 'name', 'city']
+          break;
+        case "work-order":
+          colNames = ["id", 'technician_id', "location_id", 'time', 'duration', 'price'];
+          break;
+        default:
+          break;
+      }
+
+
+      for (let i=0; i<data.length; i++){
+        let cols = Object.keys(data[i])
+        if (cols.length !== colNames.length) return false;
+
+        for (let j=0; j < colNames.length; j++){
+          if (!cols.includes(colNames[j])) {
+            return false;
+          }
+        }
+      }
+     return true;
+    }
+  }
+
     //  if (this.state.fileData && this.state.dataType !== "") {
     //    this.props.uploadFile(this.state.dataType, this.state.fileData);
     //  }
-   }
 
    render() {
      const papaparseOptions = {
@@ -60,11 +121,11 @@ import CSVReader from "react-csv-reader";
            onFileLoaded={this.handleFile}
            onError={this.handleError}
            parserOptions={papaparseOptions}
-           inputId="ObiWan"
+           inputId="input-id"
            inputStyle={{ color: "red" }}
          />
 
-         <div className='upload-lower'>
+         <div className="upload-lower">
            <select
              className="upload-select"
              name="file-type"
@@ -72,14 +133,14 @@ import CSVReader from "react-csv-reader";
              onChange={(e) => this.handleDataType(e)}
            >
              <option value="" disabled selected>
-               Select a filetype
+               Select data type
              </option>
              <option value="technician">Technician</option>
              <option value="location">Location</option>
              <option value="work-order">Work Order</option>
            </select>
 
-           <button onClick={(e) => this.handleSubmit(e)}>Upload</button>
+           <button onClick={(e) => this.handleSubmit(e, this.state.fileData, this.state.dataType)}>Upload</button>
          </div>
        </div>
      );

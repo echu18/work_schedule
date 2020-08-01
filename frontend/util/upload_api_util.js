@@ -25,6 +25,8 @@ debugger
     return $.ajax({
         url: url,
         method: "POST",
-        data: {import_data}
-    });
+        data: {import_data},
+    })
+    .done(()=> alert('Upload Successful'))
+    .fail(()=> alert('Upload Failed (Database may have duplicate values)'));
 };
