@@ -66,13 +66,29 @@ Use the following buttons to navigate throughout the calendar:
 
 
 #### Month View
---- clicking on dates will go to day view as well
+
+The month view displays the entire month's work orders (compact events) at a glance. 
+- Days that have a lot of work orders will have a ``+[number] more`` link - clicking on this will display a popup of all of that day's events.
+
+- **Hovering** over a compact event block in the month view will summon a tooltip that displays details of that work order.
+
+**Navigating to day view** 
+
+1. Clicking on the ``Day`` button from month view will display the programmed default date. If the user navigated to a specific date, then switched to month view, the next click on ``Day`` will navigate back to the previously accessed date.
+
+2. Clicking directly on the calendar date number (will change color when hovered over) will navigate to the selected date
 
 
 
 #### Day View
 
+The day view displays all technicians' work orders for the selected date. By default the day begins at 5:00 and ends at 19:00, but custom time ranges can be changed in the minAccessor and maxAccessor within the Calendar component of _schedule.jsx_.
 
+
+If the calendar cannot fit all technician columns onto the current page, the hidden technician columns can be accessed by scrolling right on the calendar day view (works with both regular and wide view).
+
+Just like the month view, **hovering** over a full event in the day view will summon a tooltip that displays details of that work order. 
+	- Some work order events may be too short in duration (and thus have a smaller block on the calendar), for the event block
 
 
 
