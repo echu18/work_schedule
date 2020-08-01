@@ -5,7 +5,15 @@ Work Schedule is a demo project that displays technicians' work order schedules 
 It was built using Ruby on Rails, PostgreSQL, JavaScript, React (+ React-tooltip, React-big-calendar, React-csv-reader), HTML/CSS.
 
 
+---
+### [Demo](https://work-order-schedule.herokuapp.com/)
 
+A demo of the work schedule calendar with preloaded event data can be viewed [here](https://work-order-schedule.herokuapp.com/).
+
+Note: the default date is set to October 1, 2019 for easier access to viewing sample events
+	- This can be changed with the **defaultDate** prop within the Calendar component of schedule.jsx 
+	
+---	
 
 
 Setup and Running the App Locally
@@ -26,19 +34,24 @@ User can directly upload csv files from the top right corner of the page. Day vi
 
 
 
-Use
+Features and Use
 ---
 
 ### Uploading CSV files
 
-The user can upload CSV files from the box in the top right corner, by
+The user can upload CSV files from the box in the top right corner.
 
-1) Selecting a file to upload with the ``Choose File`` button and popup
-2) Selecting a data type (Technician, Location, or Work Order)
-3) Clicking on the ``Upload`` button
+Steps:
 
-Note: Both Technician files and Location files must be uploaded prior to uploading Work Orders.
+1) Select a file to upload with the ``Choose File`` button and popup
+2) Select data type (Technician, Location, or Work Order)
+3) Click on the ``Upload`` button
+4) Success or error message will appear depending on upload status
 
+**Note: Both Technician files and Location files must be uploaded prior to uploading Work Orders.**
+
+
+---  
 
 
 
@@ -48,6 +61,7 @@ Calendar will display events if Technician, Location and Work Order files have b
 
 
 #### Navigation
+
 
 Use the following buttons to navigate throughout the calendar:
 
@@ -65,14 +79,17 @@ Use the following buttons to navigate throughout the calendar:
 ``Wide View`` - [Day view only] widens columns so users can see full width of events. Because columns have exanded, some technician columns will be hidden. They can be viewed by scrolling left and right on the calendar. Click on ``Month`` and then ``Day`` to reset the day view.
 
 
+--
+
+### Month View
 
 
-#### Month View
 
 The month view displays the entire month's work orders (compact events) at a glance. 
 - Days that have a lot of work orders will have a ``+[number] more`` link - clicking on this will display a popup of all of that day's events.
 
 - **Hovering** over a compact event block in the month view will summon a tooltip that displays details of that work order.
+
 
 **Navigating to day view** 
 
@@ -82,7 +99,7 @@ The month view displays the entire month's work orders (compact events) at a gla
 
 
 
-#### Day View
+### Day View
 
 The day view displays all technicians' work orders for the selected date. 
 
@@ -95,7 +112,9 @@ The day view displays all technicians' work orders for the selected date.
 
 - Just like with the month view, **hovering** over a full event in the day view will summon a popup that displays details of that work order. Some work order events may be too short in duration (thus having a smaller block on the calendar), for the event block to display full details.
 
-#### Available Time
+---
+
+### Available Time (day view only)
 
 - Double-clicking on any blank time slot (where there is no event) will summon a popup that displays the duration of available time between the previous and next work orders for that technician of that column.
 
@@ -105,6 +124,7 @@ The day view displays all technicians' work orders for the selected date.
 
 
 
+---
 
 
 
@@ -112,10 +132,3 @@ The day view displays all technicians' work orders for the selected date.
 
 
 
-### Demo
-
-Note: the default date is set to October 1, 2019 for easier access to viewing sample events
-	- This can be changed with the **defaultDate** prop within the Calendar component of schedule.jsx 
-	
-	
-	
