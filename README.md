@@ -15,6 +15,7 @@ Note: the default date is set to October 1, 2019 for easier access to viewing sa
 	
 ---	
 
+![Calendar Month View](https://ec-storage.s3-us-west-1.amazonaws.com/work-schedule-screen.JPG)
 
 Setup and Running the App Locally
 ---
