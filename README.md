@@ -128,7 +128,7 @@ The day view displays all technicians' work orders for the selected date.
 
 ---
 
-The work schedule calendar is based on [React-Big-Calendar](https://github.com/jquense/react-big-calendar#react-big-calendar) and was built with Ruby on Rails, PostgreSQL, JavaScript, React, and HTML/CSS.
+The work schedule calendar is based on [React-Big-Calendar](https://github.com/jquense/react-big-calendar#react-big-calendar) and built with Ruby on Rails, PostgreSQL, JavaScript, React, and HTML/CSS.
 
 
 React Component Libraries Used:
