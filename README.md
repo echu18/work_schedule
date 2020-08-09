@@ -114,6 +114,32 @@ The day view displays all technicians' work orders for the selected date.
 
 - Just like with the month view, **hovering** over a full event in the day view will summon a popup that displays details of that work order. Some work order events may be too short in duration (thus having a smaller block on the calendar), for the event block to display full details.
 
+
+The tooltip popup displays event details.
+```
+	function returnToolTip(){
+          return (
+            <ReactTooltip
+              id={`tooltip-${workOrder.id}`}
+              className="tooltip-event"
+              place={"top"}
+            >
+              <h3>
+                {formatTime(startTime)} - {formatTime(endTime)}
+              </h3>
+
+              <p>{`Technician: ${technician.name}`}</p>
+              <p>{`Location: ${location.name} (${location.city})`}</p>
+              <p>{`Duration: ${workOrder.duration} mins`}</p>
+              <p>{`Price: $${workOrder.price}`}</p>
+            </ReactTooltip>
+          );
+        }
+```
+
+
+
+
 ---
 
 ### Available Time (day view only)
